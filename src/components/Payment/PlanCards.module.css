@@ -1,0 +1,221 @@
+/*
+  Plan cards: one column on phones, three side by side once the space allows.
+  Sized by the space the cards sit in (not the screen), so they also fit inside
+  the dashboard next to the sidebar and inside the paywall pop-up.
+*/
+.wrap {
+  container-type: inline-size;
+  width: 100%;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 16px;
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+@container (min-width: 720px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+}
+
+/* Older browsers without container sizing: decide by screen width instead. */
+@supports not (container-type: inline-size) {
+  @media (min-width: 1024px) {
+    .grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 20px;
+  border: 1px solid #e4e7ec;
+  border-radius: 20px;
+  background: #ffffff;
+  color: #1c1c1c;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06);
+}
+
+@container (min-width: 720px) {
+  .card {
+    padding: 24px;
+  }
+}
+
+.featured {
+  border-color: #004085;
+  background: #004085;
+  color: #ffffff;
+  box-shadow: 0 12px 28px rgba(0, 64, 133, 0.22);
+}
+
+.school {
+  border-color: #f6c648;
+  background: #fffbf0;
+}
+
+.current {
+  outline: 2px solid #17b26a;
+  outline-offset: 2px;
+}
+
+.label {
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #eef4fb;
+  color: #004085;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.featured .label {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+}
+
+.school .label {
+  background: #fdefc8;
+  color: #6b4a00;
+}
+
+.title {
+  margin: 14px 0 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.tier {
+  margin: 2px 0 0;
+  color: #667085;
+  font-size: 14px;
+}
+
+.featured .tier {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.divider {
+  height: 1px;
+  margin: 16px 0;
+  background: #eaecf0;
+}
+
+.featured .divider {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.school .divider {
+  background: #f6e3ae;
+}
+
+.benefits {
+  display: grid;
+  flex: 1;
+  align-content: start;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.benefits li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.benefits svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: #17b26a;
+}
+
+.featured .benefits svg {
+  color: #f6c648;
+}
+
+.price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+  margin-top: 20px;
+}
+
+.amount {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.schoolAmount {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.per {
+  color: #667085;
+  font-size: 14px;
+}
+
+.featured .per {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 16px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 12px;
+  background: #004085;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.button:hover {
+  background: #003366;
+}
+
+.featured .button {
+  background: #f6c648;
+  color: #1c1c1c;
+}
+
+.featured .button:hover {
+  background: #eab72f;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.button:focus-visible {
+  outline: 3px solid #0071ed;
+  outline-offset: 2px;
+}

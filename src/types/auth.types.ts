@@ -25,6 +25,8 @@ export interface User {
   careerResults?: any;
   isCareerPathChecked?: boolean;
   subscriptionPlanStatus?: boolean;
+  // Set when a partner school's code covers this student.
+  schoolAccess?: { schoolName: string; expiresAt: string } | null;
   //   provider?: 'email' | 'google' | 'facebook' | 'apple';
 }
 

@@ -4,7 +4,7 @@ import { useAuth } from "../../contexts/useAuth";
 import { LuSchool } from "react-icons/lu";
 
 import Logo from "../../assets/logo.svg";
-import { FiGrid, FiLogOut, FiX } from "react-icons/fi";
+import { FiGrid, FiKey, FiLogOut, FiX } from "react-icons/fi";
 import { PiTextAlignCenterFill } from "react-icons/pi";
 import { TbMoneybag } from "react-icons/tb";
 import { TiGroupOutline } from "react-icons/ti";
@@ -43,6 +43,7 @@ const SideBar = ({
   let dataLoansPath:boolean = location.pathname.startsWith("/admin/loans")
   let userPath:boolean = location.pathname.startsWith("/admin/users")
   let waitlistPath:boolean = location.pathname.startsWith("/admin/waitlist")
+  let schoolCodesPath:boolean = location.pathname.startsWith("/admin/school-codes")
   // let profilePath:boolean = location.pathname.startsWith("/admin/profile")
 
 
@@ -63,7 +64,7 @@ const SideBar = ({
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex flex-col space-y-5 h-full">
+      <nav className="flex flex-col space-y-5 h-full overflow-y-auto">
         <NavLink
           to="/admin"
           className={({ isActive }) =>
@@ -89,6 +90,21 @@ const SideBar = ({
           <LuSchool className="w-5 h-5 mr-3"  />
           <span className={schoolPath ? "text-white bg-[#004085]" : "text-[#5D5D5B]"}>
             Schools
+          </span>
+        </NavLink>
+
+        <NavLink
+          to="/admin/school-codes"
+          className={({ isActive }) =>
+            `flex items-center p-2 font-bold rounded-md transition-colors ${
+              isActive || schoolCodesPath ? "text-white bg-[#004085]" : "text-[#5D5D5B] hover:bg-gray-100"
+            }`
+          }
+          end
+        >
+          <FiKey className="w-5 h-5 mr-3" />
+          <span className={schoolCodesPath ? "text-white bg-[#004085]" : "text-[#5D5D5B]"}>
+            School codes
           </span>
         </NavLink>
 

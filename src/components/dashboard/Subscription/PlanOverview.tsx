@@ -69,7 +69,9 @@ const PlanOverview = ({ setActiveTab }: PlanOverviewType) => {
             </p>
             {currentPlanDetail && (
               <p className="text-[#757575] text-[16px] font-medium">
-                {currentPlanDetail.nairaPrice} / {currentPlanDetail.dollarPrice}
+                {user?.payment_plan === "SCHOOL_PARTNER"
+                  ? `Covered by ${user?.schoolAccess?.schoolName ?? "your school"}`
+                  : `${currentPlanDetail.nairaPrice} / ${currentPlanDetail.dollarPrice}`}
               </p>
             )}
 

@@ -59,7 +59,7 @@ export default function Subscription() {
 
       <div className="mt-5">
         <p className="text-[#212529] text-[18px] font-bold">
-          Subscription Management 1
+          Subscription Management
         </p>
         <p className="text-[12px] text-[#757575] mt-2">
           Manage your plans, billing, and payment methods

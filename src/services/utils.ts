@@ -513,3 +513,53 @@ export const getUserActivity = async () => {
     throw err;
   }
 };
+
+/* ----------------------------- School codes ----------------------------- */
+
+export interface SchoolCodeResult {
+  schoolName: string;
+  expiresAt: string;
+  needsPassword: boolean;
+  email: string;
+}
+
+// A student enters the code their partner school gave them. Logged in students
+// use their own account; visitors send the details from the eligibility form.
+export const redeemSchoolCode = async (body: {
+  code: string;
+  email?: string;
+  firstname?: string;
+  lastname?: string;
+}): Promise<SchoolCodeResult> => {
+  const response = await api.post("/school-codes/redeem", body);
+  return response.data.data as SchoolCodeResult;
+};
+
+export interface SchoolCode {
+  id: string;
+  code: string;
+  schoolName: string;
+  seats: number;
+  used: number;
+  active: boolean;
+  createdAt: string;
+  expiresAt: string;
+  status: "active" | "full" | "expired" | "off";
+  daysLeft: number;
+}
+
+// Admin panel: create, list and switch school codes on or off.
+export const getSchoolCodes = async (): Promise<SchoolCode[]> => {
+  const response = await api.get("/school-codes");
+  return response.data.data as SchoolCode[];
+};
+
+export const createSchoolCode = async (body: { schoolName: string; seats: number }): Promise<SchoolCode> => {
+  const response = await api.post("/school-codes", body);
+  return response.data.data as SchoolCode;
+};
+
+export const setSchoolCodeActive = async (id: string, active: boolean): Promise<SchoolCode> => {
+  const response = await api.patch(`/school-codes/${id}`, { active });
+  return response.data.data as SchoolCode;
+};

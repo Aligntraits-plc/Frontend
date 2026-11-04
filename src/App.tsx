@@ -40,6 +40,7 @@ const DataManagement = lazy(() => import("./pages/admin/DataManagement"));
 const Loans = lazy(() => import("./pages/admin/Loans"));
 const BulkCenter = lazy(() => import("./pages/admin/BulkCenter"));
 const ProfileManagement = lazy(() => import("./pages/admin/ProfileManagement"));
+const SchoolCodes = lazy(() => import("./pages/admin/SchoolCodes"));
 const HomeSearch = lazy(() => import("./pages/HomeSearch"));
 const OnboardingPage = lazy(() => import("./pages/auth/OnboardingPage"));
 const GoogleAuthSuccess = lazy(() => import("./pages/auth/GoogleAuthSuccess"));
@@ -178,6 +179,7 @@ const router = createBrowserRouter([
           { path: "loans", element: <Loans /> },
           { path: "data-management", element: <DataManagement /> },
           { path: "waitlist", element: <Waitlist /> },
+          { path: "school-codes", element: <SchoolCodes /> },
           { path: "users", element: <UsersList /> },
           { path: "schools", element: <Schools /> },
           { path: "schools/:schoolId/courses", element: <SchoolCourses /> },

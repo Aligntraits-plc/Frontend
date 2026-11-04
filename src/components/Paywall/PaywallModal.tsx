@@ -4,69 +4,8 @@ import { BeatLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import { makePayment, getMe, hasActiveAccess } from "../../services/utils";
 import { useAuth } from "../../contexts/useAuth";
-
-interface Plan {
-  id: string;
-  label: string; // "One-time" | "Monthly"
-  title: string; // "Basic One-Time Plan"
-  tier: string; // "Basic" | "Silver" | "Gold"
-  nairaPrice: string;
-  usdPrice: string;
-  features: string[];
-  buttonText: string; // API plan key
-  highlighted: boolean;
-}
-
-const plans: Plan[] = [
-  {
-    id: "basic",
-    label: "One-time",
-    title: "Basic One-Time Plan",
-    tier: "Basic",
-    nairaPrice: "₦1,100",
-    usdPrice: "$0.81",
-    features: [
-      "One result only",
-      "No future updates",
-      "No access to scholarships",
-      "No access to loan information",
-    ],
-    buttonText: "BASIC_ONETIME",
-    highlighted: false,
-  },
-  {
-    id: "silver",
-    label: "Monthly",
-    title: "Local Access Plan",
-    tier: "Silver",
-    nairaPrice: "₦3,700",
-    usdPrice: "$2.71",
-    features: [
-      "Unlimited checks within 1 country",
-      "Loan information & course access",
-      "Editable exam records",
-    ],
-    buttonText: "LOCAL_MONTHLY",
-    highlighted: true,
-  },
-  {
-    id: "gold",
-    label: "Monthly",
-    title: "Global Access Plan",
-    tier: "Gold",
-    nairaPrice: "₦5,500",
-    usdPrice: "$4.03",
-    features: [
-      "Access to all country/schools",
-      "Loan information & course access",
-      "Editable exam records",
-      "Scholarships, global support",
-      "New school priority access",
-    ],
-    buttonText: "GLOBAL_MONTHLY",
-    highlighted: false,
-  },
-];
+import PlanCards from "../Payment/PlanCards";
+import SchoolCodeDialog from "../Payment/SchoolCodeDialog";
 
 interface PaywallModalProps {
   onUnlocked: () => void;
@@ -77,8 +16,9 @@ const POLL_INTERVAL_MS = 4000;
 const POLL_TIMEOUT_MS = 5 * 60 * 1000;
 
 const PaywallModal = ({ onUnlocked, onClose }: PaywallModalProps) => {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [loadingPlanId, setLoadingPlanId] = useState<string | null>(null);
+  const [codeOpen, setCodeOpen] = useState(false);
   const [awaitingPayment, setAwaitingPayment] = useState(false);
 
   const pollTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -125,8 +65,8 @@ const PaywallModal = ({ onUnlocked, onClose }: PaywallModalProps) => {
     }, POLL_INTERVAL_MS);
   };
 
-  const handleSelectPlan = async (plan: Plan) => {
-    setLoadingPlanId(plan.id);
+  const handleSelectPlan = async (planKey: string) => {
+    setLoadingPlanId(planKey);
 
     const paymentWindow = window.open("", "_blank");
 
@@ -140,7 +80,7 @@ const PaywallModal = ({ onUnlocked, onClose }: PaywallModalProps) => {
 
     try {
       const data = await makePayment({
-        paymentPlan: plan.buttonText,
+        paymentPlan: planKey,
         firstname: user?.firstname,
         lastname: user?.lastname,
         email: user?.email,
@@ -162,9 +102,25 @@ const PaywallModal = ({ onUnlocked, onClose }: PaywallModalProps) => {
     }
   };
 
+  // A partner school's code covers the student straight away: refresh their
+  // profile and unlock, no payment tab needed.
+  const onSchoolDone = async () => {
+    setCodeOpen(false);
+    try {
+      const me = await getMe();
+      if (me?.data) {
+        setUser(me.data);
+        localStorage.setItem("user", JSON.stringify(me.data));
+      }
+    } catch {
+      /* the server already unlocked it; the page refreshes the profile later */
+    }
+    onUnlocked();
+  };
+
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-4xl w-full relative overflow-hidden">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-3 sm:p-4">
+      <div className="bg-white rounded-2xl max-w-5xl w-full relative max-h-[92vh] overflow-y-auto">
         {onClose && !awaitingPayment && (
           <button
             onClick={onClose}
@@ -177,7 +133,7 @@ const PaywallModal = ({ onUnlocked, onClose }: PaywallModalProps) => {
         {/* Header – matches second image */}
         <div className="pt-8 pb-2 text-center px-6">
           <h2 className="text-xl md:text-2xl font-bold text-[#1C1C1C]">
-            Get Instant Access to Your Results!
+            Get instant access to your results
           </h2>
         </div>
 
@@ -200,109 +156,22 @@ const PaywallModal = ({ onUnlocked, onClose }: PaywallModalProps) => {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-6">
-            {plans.map((plan) => (
-              <div
-                key={plan.id}
-                className={`relative flex flex-col rounded-xl overflow-hidden border ${
-                  plan.highlighted
-                    ? "bg-[#004085] text-white border-[#004085] shadow-lg"
-                    : "bg-white text-[#1C1C1C] border-gray-200"
-                }`}
-              >
-                {/* Top billing label */}
-                <div
-                  className={`text-center text-xs font-medium py-2 ${
-                    plan.highlighted
-                      ? "bg-[#003070] text-white/80"
-                      : "bg-gray-50 text-gray-500"
-                  }`}
-                >
-                  {plan.label}
-                </div>
-
-                <div className="flex flex-col flex-1 p-5">
-                  {/* Plan title */}
-                  <h3
-                    className={`text-center font-semibold text-[15px] mb-1 ${
-                      plan.highlighted ? "text-white" : "text-[#1C1C1C]"
-                    }`}
-                  >
-                    {plan.title}
-                  </h3>
-
-                  {/* Tier */}
-                  <p
-                    className={`text-center text-sm mb-3 ${
-                      plan.highlighted ? "text-white/60" : "text-gray-400"
-                    }`}
-                  >
-                    {plan.tier}
-                  </p>
-
-                  {/* Divider */}
-                  <div
-                    className={`h-px w-10 mx-auto mb-4 ${
-                      plan.highlighted ? "bg-white/25" : "bg-gray-200"
-                    }`}
-                  />
-
-                  {/* Features */}
-                  <ul className="flex-1 space-y-2 mb-5">
-                    {plan.features.map((f, i) => (
-                      <li
-                        key={i}
-                        className={`text-sm flex items-start gap-2 ${
-                          plan.highlighted ? "text-white/90" : "text-gray-600"
-                        }`}
-                      >
-                        <span className="mt-0.5 shrink-0">•</span>
-                        <span>{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* Price */}
-                  <p
-                    className={`text-center font-bold text-lg mb-4 ${
-                      plan.highlighted ? "text-white" : "text-[#1C1C1C]"
-                    }`}
-                  >
-                    {plan.nairaPrice}{" "}
-                    <span
-                      className={`text-sm font-normal ${
-                        plan.highlighted ? "text-white/60" : "text-gray-400"
-                      }`}
-                    >
-                      / {plan.usdPrice}
-                    </span>
-                  </p>
-
-                  {/* Select button */}
-                  <button
-                    disabled={loadingPlanId === plan.id}
-                    onClick={() => handleSelectPlan(plan)}
-                    className={`w-full py-2.5 rounded-lg text-sm font-semibold transition disabled:opacity-50 ${
-                      plan.highlighted
-                        ? "bg-[#F6C648] hover:bg-yellow-400 text-[#1C1C1C]"
-                        : "bg-[#004085] hover:bg-blue-800 text-white"
-                    }`}
-                  >
-                    {loadingPlanId === plan.id ? (
-                      <BeatLoader
-                        color={plan.highlighted ? "#1C1C1C" : "#fff"}
-                        size={8}
-                      />
-                    ) : (
-                      "Select"
-                    )}
-                  </button>
-                </div>
-              </div>
-            ))}
+          <div className="p-4 sm:p-6">
+            <PlanCards
+              onSelectPlan={handleSelectPlan}
+              onProvideCode={() => setCodeOpen(true)}
+              loadingPlanKey={loadingPlanId}
+            />
           </div>
         )}
       </div>
+
+      <SchoolCodeDialog
+        open={codeOpen}
+        onClose={() => setCodeOpen(false)}
+        doneLabel="See my results"
+        onDone={onSchoolDone}
+      />
     </div>
   );
 };
