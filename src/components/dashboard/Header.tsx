@@ -1,15 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Menu, MessageCircle } from "lucide-react";
+import { Menu } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { useAuth } from "../../contexts/useAuth";
 import s from "./Header.module.css";
 
-// Support line for "Help on WhatsApp", for example 2348012345678 (set VITE_WHATSAPP_NUMBER on Vercel).
-// Until it's set, the button opens the private conversation with the AlignTraits team instead.
-const WHATSAPP = String(import.meta.env.VITE_WHATSAPP_NUMBER || "").replace(/\D/g, "");
-const WHATSAPP_URL = WHATSAPP
-  ? `https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Hi AlignTraits, I need help with ")}`
-  : null;
+// "Help on WhatsApp" opens the AlignTraits WhatsApp group.
+// To point it somewhere else without a code change, set VITE_WHATSAPP_URL on Vercel.
+const WHATSAPP_GROUP = "https://chat.whatsapp.com/LS7jfa4W5iFLP49rYoR9IX?mode=gi_t";
+const WHATSAPP_URL = String(import.meta.env.VITE_WHATSAPP_URL || "").trim() || WHATSAPP_GROUP;
 
 const initials = (first?: string, last?: string) =>
   `${(first || "").trim()[0] || ""}${(last || "").trim()[0] || ""}`.toUpperCase() || "A";
@@ -38,17 +36,10 @@ const Header = ({
       </div>
 
       <div className={s.actions}>
-        {WHATSAPP_URL ? (
-          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className={s.help} aria-label="Help on WhatsApp">
-            <FaWhatsapp size={19} aria-hidden="true" />
-            <span className={s.helpLabel}>Help on WhatsApp</span>
-          </a>
-        ) : (
-          <Link to="/dashboard/community/team" className={s.help} aria-label="Get help from the AlignTraits team">
-            <MessageCircle size={18} aria-hidden="true" />
-            <span className={s.helpLabel}>Get help</span>
-          </Link>
-        )}
+        <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className={s.help} aria-label="Help on WhatsApp">
+          <FaWhatsapp size={19} aria-hidden="true" />
+          <span className={s.helpLabel}>Help on WhatsApp</span>
+        </a>
         <button type="button" className={s.cta} onClick={() => navigate("/career-recommedation")}>
           Career recommendation
         </button>
