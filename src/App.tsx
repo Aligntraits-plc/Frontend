@@ -28,6 +28,10 @@ const ResetPassword = lazy(() => import("./pages/auth/ResetPassword"));
 const Dashboard = lazy(() => import("./pages/dashboard/Dashboard"));
 const Pathfinder = lazy(() => import("./pages/dashboard/Pathfinder"));
 const Community = lazy(() => import("./pages/dashboard/Community"));
+const CommunityHome = lazy(() => import("./components/community/CommunityHome"));
+const ChannelView = lazy(() => import("./components/community/ChannelView"));
+const TeamChat = lazy(() => import("./components/community/TeamChat"));
+const EventsView = lazy(() => import("./components/community/EventsView"));
 const Admin = lazy(() => import("./pages/admin/Index"));
 const AdminLogin = lazy(() => import("./pages/admin/Login"));
 const Schools = lazy(() => import("./pages/admin/Schools"));
@@ -41,6 +45,7 @@ const Loans = lazy(() => import("./pages/admin/Loans"));
 const BulkCenter = lazy(() => import("./pages/admin/BulkCenter"));
 const ProfileManagement = lazy(() => import("./pages/admin/ProfileManagement"));
 const SchoolCodes = lazy(() => import("./pages/admin/SchoolCodes"));
+const CommunityAdmin = lazy(() => import("./pages/admin/CommunityAdmin"));
 const HomeSearch = lazy(() => import("./pages/HomeSearch"));
 const OnboardingPage = lazy(() => import("./pages/auth/OnboardingPage"));
 const GoogleAuthSuccess = lazy(() => import("./pages/auth/GoogleAuthSuccess"));
@@ -144,7 +149,16 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <Dashboard /> },
       { path: "pathfinder", element: <Pathfinder /> },
-      { path: "community", element: <Community /> },
+      {
+        path: "community",
+        element: <Community />,
+        children: [
+          { index: true, element: <CommunityHome /> },
+          { path: "c/:slug", element: <ChannelView /> },
+          { path: "team", element: <TeamChat /> },
+          { path: "events", element: <EventsView /> },
+        ],
+      },
       { path: "career-pathway", element: <CareerPath /> },
       { path: "progres-tracker", element: <ProgressTracker /> },
       { path: "school", element: <SchoolPage /> },
@@ -180,6 +194,7 @@ const router = createBrowserRouter([
           { path: "data-management", element: <DataManagement /> },
           { path: "waitlist", element: <Waitlist /> },
           { path: "school-codes", element: <SchoolCodes /> },
+          { path: "community", element: <CommunityAdmin /> },
           { path: "users", element: <UsersList /> },
           { path: "schools", element: <Schools /> },
           { path: "schools/:schoolId/courses", element: <SchoolCourses /> },

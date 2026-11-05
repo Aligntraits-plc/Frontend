@@ -1,0 +1,225 @@
+/* Dashboard top bar: page title, quick action and the student's avatar. */
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: var(--dash-header);
+  padding: 0 16px;
+  border-bottom: 1px solid var(--at-line);
+  background: var(--at-white);
+}
+
+@media (min-width: 1024px) {
+  .bar {
+    padding: 0 28px;
+  }
+}
+
+/* Inside a Community chat on a phone, the chat has its own header with a back button. */
+@media (max-width: 1023px) {
+  .hideOnMobile {
+    display: none;
+  }
+}
+
+.menu {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-left: -6px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--at-navy);
+  cursor: pointer;
+}
+
+.menu:hover {
+  background: var(--at-mist);
+}
+
+.menu:focus-visible,
+.cta:focus-visible,
+.avatar:focus-visible {
+  outline: 3px solid var(--at-blue);
+  outline-offset: 2px;
+}
+
+@media (min-width: 1024px) {
+  .menu {
+    display: none;
+  }
+}
+
+.titles {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  overflow: hidden;
+  margin: 0;
+  color: var(--at-navy);
+  font-family: var(--font-heading);
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (min-width: 1024px) {
+  .title {
+    font-size: 22px;
+  }
+}
+
+.desc {
+  display: none;
+  overflow: hidden;
+  margin: 2px 0 0;
+  color: var(--at-slate);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (min-width: 1024px) {
+  .desc {
+    display: block;
+  }
+}
+
+.actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 12px;
+}
+
+/* "Help on WhatsApp": a green pill on larger screens, a round icon button on phones */
+.help {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: var(--at-success-10);
+  color: var(--at-success);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.15s ease;
+}
+
+.help:hover {
+  background: #cfeedd;
+}
+
+.help:focus-visible {
+  outline: 3px solid var(--at-success);
+  outline-offset: 2px;
+}
+
+.helpLabel {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .help {
+    width: auto;
+    padding: 0 16px 0 14px;
+  }
+
+  .helpLabel {
+    display: inline;
+  }
+}
+
+.cta {
+  display: none;
+  align-items: center;
+  height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--at-navy);
+  color: var(--at-white);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cta:hover {
+  background: var(--at-navy-deep);
+}
+
+@media (min-width: 1024px) {
+  .cta {
+    display: inline-flex;
+  }
+}
+
+.who {
+  display: none;
+  min-width: 0;
+  max-width: 220px;
+  text-align: right;
+}
+
+@media (min-width: 1280px) {
+  .who {
+    display: block;
+  }
+}
+
+.whoName {
+  overflow: hidden;
+  color: var(--at-ink);
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.whoMeta {
+  overflow: hidden;
+  color: var(--at-slate);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.avatar {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--at-gold);
+  color: var(--at-navy-deep);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

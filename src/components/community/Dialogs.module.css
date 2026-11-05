@@ -1,0 +1,86 @@
+.rules {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--at-ink);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.rules li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.ruleNum {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  margin-top: 1px;
+  border-radius: 999px;
+  background: var(--at-gold);
+  color: var(--at-navy-deep);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.reasons {
+  display: grid;
+  gap: 8px;
+  margin: 0 0 14px;
+  padding: 0;
+  border: 0;
+}
+
+.reason {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 46px;
+  padding: 10px 14px;
+  border: 1px solid var(--at-line);
+  border-radius: 12px;
+  color: var(--at-ink);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.reason input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--at-blue-600);
+}
+
+.reasonOn {
+  border-color: var(--at-blue-600);
+  background: var(--at-blue-10);
+}
+
+.noteLabel {
+  display: grid;
+  gap: 6px;
+  color: var(--at-ink);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.note {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--at-line);
+  border-radius: 12px;
+  font: inherit;
+  font-size: 15px;
+  resize: vertical;
+}
+
+.note:focus {
+  border-color: var(--at-blue-600);
+  outline: none;
+}

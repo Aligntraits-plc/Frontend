@@ -1,0 +1,135 @@
+.wrap {
+  position: relative;
+}
+
+.field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 12px;
+  border-radius: 10px;
+}
+
+.field input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: 15px;
+  outline: none;
+}
+
+.dark .field {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.dark .field input {
+  color: var(--at-white);
+}
+
+.dark .field input::placeholder {
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.dark .field:focus-within {
+  box-shadow: 0 0 0 2px var(--at-gold);
+}
+
+.light .field {
+  border: 1px solid var(--at-line);
+  background: var(--at-white);
+  color: var(--at-slate);
+}
+
+.light .field input {
+  color: var(--at-ink);
+}
+
+.light .field:focus-within {
+  border-color: var(--at-blue-600);
+  box-shadow: 0 0 0 3px var(--at-blue-10);
+}
+
+.results {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  left: 0;
+  z-index: 25;
+  max-height: 340px;
+  overflow-y: auto;
+  padding: 6px;
+  border: 1px solid var(--at-line);
+  border-radius: 12px;
+  background: var(--at-white);
+  box-shadow: 0 12px 32px rgba(0, 38, 80, 0.16);
+}
+
+.result {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--at-navy);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.result:hover,
+.result:focus-visible {
+  background: var(--at-mist);
+  outline: none;
+}
+
+.result svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.resultText {
+  display: grid;
+  min-width: 0;
+}
+
+.resultLabel {
+  overflow: hidden;
+  color: var(--at-ink);
+  font-size: 14px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.resultMeta {
+  overflow: hidden;
+  color: var(--at-slate);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.none {
+  margin: 0;
+  padding: 12px;
+  color: var(--at-slate);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

@@ -4,7 +4,7 @@ import { useAuth } from "../../contexts/useAuth";
 import { LuSchool } from "react-icons/lu";
 
 import Logo from "../../assets/logo.svg";
-import { FiGrid, FiKey, FiLogOut, FiX } from "react-icons/fi";
+import { FiGrid, FiKey, FiLogOut, FiMessageSquare, FiX } from "react-icons/fi";
 import { PiTextAlignCenterFill } from "react-icons/pi";
 import { TbMoneybag } from "react-icons/tb";
 import { TiGroupOutline } from "react-icons/ti";
@@ -44,6 +44,7 @@ const SideBar = ({
   let userPath:boolean = location.pathname.startsWith("/admin/users")
   let waitlistPath:boolean = location.pathname.startsWith("/admin/waitlist")
   let schoolCodesPath:boolean = location.pathname.startsWith("/admin/school-codes")
+  let communityPath:boolean = location.pathname.startsWith("/admin/community")
   // let profilePath:boolean = location.pathname.startsWith("/admin/profile")
 
 
@@ -105,6 +106,21 @@ const SideBar = ({
           <FiKey className="w-5 h-5 mr-3" />
           <span className={schoolCodesPath ? "text-white bg-[#004085]" : "text-[#5D5D5B]"}>
             School codes
+          </span>
+        </NavLink>
+
+        <NavLink
+          to="/admin/community"
+          className={({ isActive }) =>
+            `flex items-center p-2 font-bold rounded-md transition-colors ${
+              isActive || communityPath ? "text-white bg-[#004085]" : "text-[#5D5D5B] hover:bg-gray-100"
+            }`
+          }
+          end
+        >
+          <FiMessageSquare className="w-5 h-5 mr-3" />
+          <span className={communityPath ? "text-white bg-[#004085]" : "text-[#5D5D5B]"}>
+            Community
           </span>
         </NavLink>
 

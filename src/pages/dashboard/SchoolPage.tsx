@@ -271,7 +271,7 @@ export default function SchoolPage() {
       ) : (
         <div className="w-full">
           <div className="border-b border-b-[#EAECF0] w-[100%]">
-            <div className="w-[1000px] flex px-[20px] mt-[20px] overflow-x-auto scrollbar-hide">
+            <div className="w-full max-w-[1000px] flex px-[20px] mt-[20px] overflow-x-auto scrollbar-hide">
               {filterOptions.map((tab) => {
                 return (
                   <button
@@ -291,8 +291,8 @@ export default function SchoolPage() {
             </div>
           </div>
 
-          <div className="flex justify-between items-center px-[20px] border-b border-b-[#DDDDDD] pb-[10px]">
-            <div className="flex gap-x-[10px] my-[20px]">
+          <div className="flex flex-wrap justify-between items-center px-[20px] border-b border-b-[#DDDDDD] pb-[10px]">
+            <div className="flex flex-wrap gap-[10px] my-[20px] w-full sm:w-auto">
               <div className="flex-1 relative" ref={fieldDropdownRef}>
                 <CiSearch className="absolute top-[25%] left-[10px] text-[#999999]" />
                 <input

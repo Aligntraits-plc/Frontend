@@ -1,19 +1,36 @@
+import { useEffect, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
+import {
+  Briefcase,
+  GraduationCap,
+  Home,
+  LogOut,
+  Map,
+  Settings,
+  TrendingUp,
+  Users,
+  X,
+  type LucideIcon,
+} from "lucide-react";
 import { useAuth } from "../../contexts/useAuth";
-import Logo from "../../assets/logo.svg";
-import { FiGrid, FiLogOut, FiX } from "react-icons/fi";
-// import { MdKeyboardArrowDown } from "react-icons/md";
-// import { CgProfile } from "react-icons/cg";
-import { BsPersonFillUp } from "react-icons/bs";
-import { IoSchoolSharp } from "react-icons/io5";
-import { CgGym } from "react-icons/cg";
-import { GiProgression } from "react-icons/gi";
-import { IoSettingsSharp } from "react-icons/io5";
-import { IoIosArrowRoundBack } from "react-icons/io";
-// import { IoPersonOutline } from "react-icons/io5";
-// import { MdOutlineSecurity } from "react-icons/md";
-// import { HiAcademicCap } from "react-icons/hi";
+import LogoReversed from "../../assets/brand/aligntraits-logo-reversed.svg";
+import { useCommunitySummary } from "../community/summaryStore";
+import s from "./NewSidebar.module.css";
 
+type Item = { to: string; label: string; icon: LucideIcon; end?: boolean; match?: string; badge?: number };
+
+const SETTINGS = [
+  { to: "/dashboard/settings", label: "Account settings", end: true },
+  { to: "/dashboard/settings/profile", label: "Profile" },
+  { to: "/dashboard/settings/records", label: "Academic records" },
+  { to: "/dashboard/settings/security", label: "Security" },
+  { to: "/dashboard/settings/subscription", label: "Subscription" },
+];
+
+const initials = (first?: string, last?: string) =>
+  `${(first || "").trim()[0] || ""}${(last || "").trim()[0] || ""}`.toUpperCase() || "A";
+
+// The dashboard menu. On phones and tablets it opens from the menu button in the top bar.
 const NewSidebar = ({
   open,
   setOpen,
@@ -21,326 +38,121 @@ const NewSidebar = ({
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const { logout } = useAuth();
-  // const navigate = useNavigate();
+  const { logout, user } = useAuth();
   const location = useLocation();
+  const summary = useCommunitySummary();
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const inSettings = location.pathname.startsWith("/dashboard/settings");
+
+  // Close the menu after moving to another page (phones and tablets).
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname, setOpen]);
+
+  // While open on a phone: Escape closes it, and the page behind does not scroll.
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeRef.current?.focus();
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = previous;
+    };
+  }, [open, setOpen]);
 
   const handleLogout = async () => {
     try {
       await logout();
-      // navigate("/admin/login");
+    } finally {
       window.location.href = "/login";
-    } catch (error) {
-      console.error("Logout failed:", error);
     }
   };
 
-  let careerPath: boolean = location.pathname.startsWith(
-    "/dashboard/career-pathway",
-  );
-  let schoolPath: boolean = location.pathname.startsWith("/dashboard/school");
-  let skillRoadMapPath: boolean = location.pathname.startsWith(
-    "/dashboard/skill-roadmap",
-  );
-  let progressTrackerPath: boolean = location.pathname.startsWith(
-    "/dashboard/progres-tracker",
-  );
-  let accountPath: boolean = location.pathname.startsWith(
-    "/dashboard/settings",
-  );
-  let profilePath: boolean = location.pathname.startsWith(
-    "/dashboard/settings/profile",
-  );
-  let academicRecordsPath: boolean = location.pathname.startsWith(
-    "/dashboard/settings/records",
-  );
-  let securityPath: boolean = location.pathname.startsWith(
-    "/dashboard/settings/security",
-  );
-  let subscriptionPath: boolean = location.pathname.startsWith(
-    "/dashboard/settings/subscription",
-  );
+  const items: Item[] = [
+    { to: "/dashboard", label: "Dashboard", icon: Home, end: true },
+    { to: "/dashboard/career-pathway", label: "Career path", icon: Briefcase },
+    { to: "/dashboard/school", label: "School", icon: GraduationCap },
+    { to: "/dashboard/community", label: "Community", icon: Users, badge: summary?.unread.total ?? 0 },
+    { to: "/dashboard/skill-roadmap", label: "Skill roadmap", icon: Map },
+    { to: "/dashboard/progres-tracker", label: "Progress tracker", icon: TrendingUp },
+  ];
+
+  const name = [user?.firstname, user?.lastname].filter(Boolean).join(" ") || "Your account";
+  const meta = user?.region || user?.email || "";
+  const image = typeof user?.image === "string" && user.image ? user.image : null;
 
   return (
-    <div
-      className={`fixed z-20 lg:sticky top-0 left-0 h-screen w-[280px] bg-[#FAFAFA] border-[2px] border-[#E0E0E0] px-4 pt-8 flex flex-col transition-transform duration-300 ${
-        open ? "translate-x-0 " : "-translate-x-full lg:translate-x-0"
-      }`}
-    >
-      {/* Close Button */}
-      <FiX
-        className="absolute right-2 top-2 text-[#212121] w-6 h-6 cursor-pointer hover:animate-spin duration-50 lg:hidden"
-        onClick={() => setOpen(false)}
-      />
-      {/* Logo */}
-      <div className="flex mx-auto mb-8 relative right-5 w-[150px] border-b-[4px] w-[200px] pb-[10px]">
-        <img src={Logo} alt="AlignTraits Logo" />
-      </div>
+    <>
+      <div className={`${s.backdrop} ${open ? s.backdropOpen : ""}`} onClick={() => setOpen(false)} aria-hidden="true" />
+      <aside className={`${s.panel} ${open ? s.panelOpen : ""}`} aria-label="Main menu">
+        <div className={s.top}>
+          <NavLink to="/dashboard" aria-label="AlignTraits dashboard">
+            <img src={LogoReversed} alt="AlignTraits" className={s.logo} />
+          </NavLink>
+          <button ref={closeRef} type="button" className={s.close} onClick={() => setOpen(false)} aria-label="Close menu">
+            <X size={20} aria-hidden="true" />
+          </button>
+        </div>
 
-      {/* Navigation Links */}
-      <nav className="flex flex-col space-y-5">
-        {accountPath ? (
-          <>
-            <NavLink
-              to="/dashboard/"
-              className={() =>
-                `flex items-center text-[12px] font-bold rounded-md transition-colors ${"text-[#004085]"}`
-              }
-              end
-            >
-              <IoIosArrowRoundBack className="w-8 h-8 mr-3" />
-              <span className={"text-[#004085]"}>Go back to dashboard</span>
+        <nav className={s.nav}>
+          {items.map(({ to, label, icon: Icon, end, badge }) => (
+            <NavLink key={to} to={to} end={end} className={({ isActive }) => `${s.item} ${isActive ? s.active : ""}`}>
+              <Icon size={20} strokeWidth={1.9} aria-hidden="true" />
+              <span className={s.label}>{label}</span>
+              {badge ? (
+                <span className={s.badge} aria-label={`${badge} unread`}>
+                  {badge > 99 ? "99+" : badge}
+                </span>
+              ) : null}
             </NavLink>
+          ))}
 
-            <NavLink
-              to="/dashboard/settings"
-              className={() =>
-                `flex items-center p-2 text-[12px] font-bold rounded-md transition-colors ${
-                  location.pathname === "/dashboard/settings"
-                    ? "text-white bg-[#004085]"
-                    : "text-[#5D5D5B] hover:bg-gray-100"
-                }`
-              }
-              end
-            >
-              <IoSettingsSharp className="w-5 h-5 mr-3" />
-              <span
-                className={
-                  location.pathname === "/dashboard/settings"
-                    ? "text-white bg-[#004085]"
-                    : "text-[#5D5D5B]"
-                }
-              >
-                Account Settings
-              </span>
-            </NavLink>
+          <NavLink
+            to="/dashboard/settings"
+            className={() => `${s.item} ${inSettings ? s.active : ""}`}
+            aria-current={inSettings ? "page" : undefined}
+          >
+            <Settings size={20} strokeWidth={1.9} aria-hidden="true" />
+            <span className={s.label}>Profile and settings</span>
+          </NavLink>
+          {inSettings && (
+            <div className={s.subList}>
+              {SETTINGS.map((sub) => (
+                <NavLink
+                  key={sub.to}
+                  to={sub.to}
+                  end={sub.end}
+                  className={({ isActive }) => `${s.sub} ${isActive ? s.subActive : ""}`}
+                >
+                  {sub.label}
+                </NavLink>
+              ))}
+            </div>
+          )}
+        </nav>
 
-            <NavLink
-              to="/dashboard/settings/profile"
-              className={({ isActive }) =>
-                `flex items-center p-2 text-[12px] font-bold rounded-md transition-colors ${
-                  isActive || profilePath
-                    ? "text-white bg-[#004085]"
-                    : "text-[#5D5D5B] hover:bg-gray-100"
-                }`
-              }
-              end
-            >
-              <IoSchoolSharp className="w-5 h-5 mr-3" />
-              <span
-                className={
-                  profilePath ? "text-white bg-[#004085]" : "text-[#5D5D5B]"
-                }
-              >
-                Profile
-              </span>
-            </NavLink>
-
-            <NavLink
-              to="/dashboard/settings/records"
-              className={({ isActive }) =>
-                `flex items-center p-2 text-[12px] font-bold rounded-md transition-colors ${
-                  isActive || academicRecordsPath
-                    ? "text-white bg-[#004085]"
-                    : "text-[#5D5D5B] hover:bg-gray-100"
-                }`
-              }
-              end
-            >
-              <IoSchoolSharp className="w-5 h-5 mr-3" />
-              <span
-                className={
-                  academicRecordsPath
-                    ? "text-white bg-[#004085]"
-                    : "text-[#5D5D5B]"
-                }
-              >
-                Academic Records
-              </span>
-            </NavLink>
-
-            <NavLink
-              to="/dashboard/settings/security"
-              className={({ isActive }) =>
-                `flex items-center p-2 text-[12px] font-bold rounded-md transition-colors ${
-                  isActive || securityPath
-                    ? "text-white bg-[#004085]"
-                    : "text-[#5D5D5B] hover:bg-gray-100"
-                }`
-              }
-              end
-            >
-              <CgGym className="w-5 h-5 mr-3" />
-              <span
-                className={
-                  securityPath ? "text-white bg-[#004085]" : "text-[#5D5D5B]"
-                }
-              >
-                Security Management
-              </span>
-            </NavLink>
-
-            <NavLink
-              to="/dashboard/settings/subscription"
-              className={({ isActive }) =>
-                `flex items-center p-2 text-[12px] font-bold rounded-md transition-colors ${
-                  isActive || subscriptionPath
-                    ? "text-white bg-[#004085]"
-                    : "text-[#5D5D5B] hover:bg-gray-100"
-                }`
-              }
-              end
-            >
-              <GiProgression className="w-5 h-5 mr-3" />
-              <span
-                className={
-                  subscriptionPath
-                    ? "text-white bg-[#004085]"
-                    : "text-[#5D5D5B]"
-                }
-              >
-                Subscription Management
-              </span>
-            </NavLink>
-          </>
-        ) : (
-          <>
-            <NavLink
-              to="/dashboard"
-              className={({ isActive }) =>
-                `flex items-center p-2 text-[12px] font-bold rounded-md transition-colors ${
-                  isActive
-                    ? "text-white bg-[#004085]"
-                    : "text-[#5D5D5B] hover:bg-gray-100"
-                }`
-              }
-              end
-            >
-              <FiGrid className="w-5 h-5 mr-3" />
-              <span>Dashboard</span>
-            </NavLink>
-
-            <NavLink
-              to={"/dashboard/career-pathway"}
-              className={({ isActive }) =>
-                `flex items-center p-2 text-[12px] font-bold rounded-md transition-colors ${
-                  isActive || careerPath
-                    ? "text-white bg-[#004085]"
-                    : "text-[#5D5D5B] hover:bg-gray-100"
-                }`
-              }
-              end
-            >
-              <BsPersonFillUp className="w-5 h-5 mr-3" />
-              <span
-                className={
-                  careerPath ? "text-white bg-[#004085]" : "text-[#5D5D5B]"
-                }
-              >
-                Career Pathway
-              </span>
-            </NavLink>
-
-            <NavLink
-              to="/dashboard/school"
-              className={({ isActive }) =>
-                `flex items-center p-2 text-[12px] font-bold rounded-md transition-colors ${
-                  isActive || schoolPath
-                    ? "text-white bg-[#004085]"
-                    : "text-[#5D5D5B] hover:bg-gray-100"
-                }`
-              }
-              end
-            >
-              <IoSchoolSharp className="w-5 h-5 mr-3" />
-              <span
-                className={
-                  schoolPath ? "text-white bg-[#004085]" : "text-[#5D5D5B]"
-                }
-              >
-                School
-              </span>
-            </NavLink>
-
-            <NavLink
-              to="/dashboard/skill-roadmap"
-              className={({ isActive }) =>
-                `flex items-center p-2 text-[12px] font-bold rounded-md transition-colors ${
-                  isActive || skillRoadMapPath
-                    ? "text-white bg-[#004085]"
-                    : "text-[#5D5D5B] hover:bg-gray-100"
-                }`
-              }
-              end
-            >
-              <CgGym className="w-5 h-5 mr-3" />
-              <span
-                className={
-                  skillRoadMapPath
-                    ? "text-white bg-[#004085]"
-                    : "text-[#5D5D5B]"
-                }
-              >
-                Skill Roadmap
-              </span>
-            </NavLink>
-
-            <NavLink
-              to="/dashboard/progres-tracker"
-              className={({ isActive }) =>
-                `flex items-center p-2 text-[12px] font-bold rounded-md transition-colors ${
-                  isActive || progressTrackerPath
-                    ? "text-white bg-[#004085]"
-                    : "text-[#5D5D5B] hover:bg-gray-100"
-                }`
-              }
-              end
-            >
-              <GiProgression className="w-5 h-5 mr-3" />
-              <span
-                className={
-                  progressTrackerPath
-                    ? "text-white bg-[#004085]"
-                    : "text-[#5D5D5B]"
-                }
-              >
-                Progress Tracker
-              </span>
-            </NavLink>
-
-            <NavLink
-              to="/dashboard/settings"
-              className={({ isActive }) =>
-                `flex items-center p-2 text-[12px] font-bold rounded-md transition-colors ${
-                  isActive || accountPath
-                    ? "text-white bg-[#004085]"
-                    : "text-[#5D5D5B] hover:bg-gray-100"
-                }`
-              }
-              end
-            >
-              <IoSettingsSharp className="w-5 h-5 mr-3" />
-              <span
-                className={
-                  accountPath ? "text-white bg-[#004085]" : "text-[#5D5D5B]"
-                }
-              >
-                Account Settings
-              </span>
-            </NavLink>
-          </>
-        )}
-
-        {/* Logout Button */}
-        <button
-          onClick={handleLogout}
-          className="flex items-center p-2 text-[#5D5D5B] text-[12px] font-bold rounded-md hover:bg-red-50 hover:text-red-500 transition-colors"
-        >
-          <FiLogOut className="w-5 h-5 mr-3" />
-          <span>Logout</span>
-        </button>
-      </nav>
-    </div>
+        <div className={s.footer}>
+          <div className={s.person}>
+            <span className={s.avatar} aria-hidden="true">
+              {image ? <img src={image} alt="" /> : initials(user?.firstname, user?.lastname)}
+            </span>
+            <div className={s.personText}>
+              <div className={s.personName}>{name}</div>
+              {meta && <div className={s.personMeta}>{meta}</div>}
+            </div>
+          </div>
+          <button type="button" className={s.logout} onClick={handleLogout}>
+            <LogOut size={20} strokeWidth={1.9} aria-hidden="true" />
+            Log out
+          </button>
+        </div>
+      </aside>
+    </>
   );
 };
 

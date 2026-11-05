@@ -13,6 +13,7 @@ import {
   runPendingEligibilityCheck,
 } from "../services/pendingCheck";
 import { RequirementList, SubjectGrade } from "../types/course.types";
+import "../styles/dashboard-brand.css";
 
 export default function DashboardLayout() {
   const {
@@ -25,6 +26,8 @@ export default function DashboardLayout() {
 
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  // Community chats and events fill the phone screen with their own back button.
+  const chatOpen = /^\/dashboard\/community\/.+/.test(location.pathname);
   const [isLoading, setIsloading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showFirstTimeUser, setShowFirstTimeUser] = useState(false);
@@ -113,9 +116,12 @@ export default function DashboardLayout() {
             return navigate("/dashboard/school?tab=-1");
           }
 
+          // Students who open a Community link (for example an event reminder email)
+          // go straight to it, without the first-time pop-ups on top.
+          if (window.location.pathname.startsWith("/dashboard/community")) return;
+
           // For firsttime users
           if (!response.data?.careerResults) {
-            console.log("here");
             return setShowFirstTimeUser(true);
           }
 
@@ -164,10 +170,10 @@ export default function DashboardLayout() {
             </span>
           </div>
         ) : (
-          <div className="h-screen bg-[white] flex relative overflow-y-scroll">
+          <div className="at-app h-screen bg-[white] flex relative overflow-y-scroll">
             <NewSidebar open={open} setOpen={setOpen} />
-            <div className="flex-1 relative">
-              <Header setOpen={setOpen} />
+            <div className="flex-1 relative min-w-0">
+              <Header setOpen={setOpen} hideOnMobile={chatOpen} />
               <main className="">
                 <Outlet />
               </main>

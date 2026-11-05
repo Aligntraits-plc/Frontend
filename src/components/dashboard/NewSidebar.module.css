@@ -1,0 +1,276 @@
+/*
+  Dashboard menu. Foundation Navy panel, white text, gold for counts.
+  Computers (1024px and up): fixed column on the left.
+  Phones and tablets: slides in from the left when the menu button is tapped.
+*/
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: rgba(0, 20, 45, 0.48);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.backdropOpen {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  width: min(300px, 86vw);
+  height: 100dvh;
+  padding: 20px 16px calc(16px + env(safe-area-inset-bottom));
+  background: var(--at-navy);
+  color: var(--at-white);
+  transform: translateX(-100%);
+  transition: transform 0.24s ease;
+  box-shadow: 0 24px 48px rgba(0, 20, 45, 0.28);
+}
+
+.panelOpen {
+  transform: translateX(0);
+}
+
+@media (min-width: 1024px) {
+  .backdrop {
+    display: none;
+  }
+
+  .panel {
+    position: sticky;
+    z-index: 20;
+    flex-shrink: 0;
+    width: 264px;
+    transform: none;
+    transition: none;
+    box-shadow: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .backdrop {
+    transition: none;
+  }
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 4px 8px 20px;
+}
+
+.logo {
+  display: block;
+  width: 168px;
+  height: auto;
+}
+
+.close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--at-white);
+  cursor: pointer;
+}
+
+@media (min-width: 1024px) {
+  .close {
+    display: none;
+  }
+}
+
+.nav {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+  overflow-y: auto;
+  margin: 0 -4px;
+  padding: 0 4px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 46px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.3;
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--at-white);
+}
+
+.item:focus-visible,
+.sub:focus-visible,
+.logout:focus-visible,
+.close:focus-visible {
+  outline: 3px solid var(--at-gold);
+  outline-offset: 2px;
+}
+
+.item svg {
+  flex-shrink: 0;
+}
+
+.active,
+.active:hover {
+  background: var(--at-white);
+  color: var(--at-navy);
+  font-weight: 600;
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--at-gold);
+  color: var(--at-navy-deep);
+  font-size: 12px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.subList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 2px 0 6px 22px;
+  padding-left: 12px;
+  border-left: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.sub {
+  display: block;
+  padding: 9px 12px;
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.sub:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--at-white);
+}
+
+.subActive,
+.subActive:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--at-white);
+  font-weight: 600;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.person {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 4px 8px;
+}
+
+.avatar {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--at-gold);
+  color: var(--at-navy-deep);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.personText {
+  min-width: 0;
+}
+
+.personName {
+  overflow: hidden;
+  font-size: 15px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.personMeta {
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logout {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.86);
+  font: inherit;
+  font-size: 15px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.logout:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--at-white);
+}

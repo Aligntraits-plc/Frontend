@@ -1,91 +1,66 @@
-// import React from 'react';
-import { useAuth } from '../../contexts/useAuth';
-import { 
-  // FiBell, 
-  FiUser,
-  FiMenu,
-  // FiArrowLeft
+import { Link, useNavigate } from "react-router-dom";
+import { Menu, MessageCircle } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
+import { useAuth } from "../../contexts/useAuth";
+import s from "./Header.module.css";
 
-} from 'react-icons/fi';
-import { useLocation, useNavigate } from 'react-router-dom';
+// Support line for "Help on WhatsApp", for example 2348012345678 (set VITE_WHATSAPP_NUMBER on Vercel).
+// Until it's set, the button opens the private conversation with the AlignTraits team instead.
+const WHATSAPP = String(import.meta.env.VITE_WHATSAPP_NUMBER || "").replace(/\D/g, "");
+const WHATSAPP_URL = WHATSAPP
+  ? `https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Hi AlignTraits, I need help with ")}`
+  : null;
 
+const initials = (first?: string, last?: string) =>
+  `${(first || "").trim()[0] || ""}${(last || "").trim()[0] || ""}`.toUpperCase() || "A";
+
+// Top bar of the dashboard. The menu button opens the menu on phones and tablets.
 const Header = ({
   setOpen,
+  hideOnMobile = false,
 }: {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  hideOnMobile?: boolean;
 }) => {
   const { user, pageDesc } = useAuth();
-
-  const location = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const image = typeof user?.image === "string" && user.image ? user.image : null;
 
   return (
-    <div className="relative bg-[white] border-[0.4px] border-y-[#E0E0E0] py-4 px-5 sticky top-0 z-10 w-full overflow-hidden border-b border-b-[#DDDDDD] bg-white shadow-md sm:rounded-md">
-      <div className="flex items-center justify-between lg:gap-3 relative">
-        <div className="hidden lg:flex items-center xl:justify-between lg:gap-3 xl:gap-5">
-          <div className="space-y-2">
-            <h1 className="text-xl font-medium text-[#004085]">
-              {pageDesc?.title}
-            </h1>
-            <p className="text-[12px] lg:text-sm text-[#00408533] font-semibold">
-              {pageDesc?.desc}
-            </p>
-          </div>
-        </div>
+    <header className={`${s.bar} ${hideOnMobile ? s.hideOnMobile : ""}`}>
+      <button type="button" className={s.menu} onClick={() => setOpen(true)} aria-label="Open menu">
+        <Menu size={24} aria-hidden="true" />
+      </button>
 
-        <div className="items-center gap-x-[10px] flex lg:hidden lg:space-x-2">
-          <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-            {user?.image ? (
-              <img
-                src={user.image as string}
-                alt="Profile"
-                className="h-full w-full rounded-full object-cover"
-              />
-            ) : (
-              <FiUser className="w-6 h-6 text-gray-600" />
-            )}
-          </div>
-          <div className="">
-            <p className="text-sm font-medium text-gray-900">
-              {user?.firstname} {user?.lastname}
-            </p>
-            <p className="text-xs text-gray-500">{user?.email}</p>
-          </div>
-        </div>
-
-        
-
-        <div className="items-center hidden lg:flex  lg:space-x-2">
-          {
-            location.pathname.startsWith("/dashboard/") && 
-            <div className="w-[400px] h-[40px] hidden lg:flex justify-end w-[350px] bg-red lg:px-20">
-              <button onClick={() => navigate("/career-recommedation")} className="bg-[#004085] h-[40px] w-[90%] lg:w-[180px] font-semibold text-[12px] text-[white] rounded-md">
-                Career Recommendation
-              </button>
-            </div>
-          }
-          <div className="text-right">
-            <p className="text-sm font-medium text-gray-900">
-              {user?.firstname} {user?.lastname}
-            </p>
-            <p className="text-xs text-gray-500">{user?.email}</p>
-          </div>
-          <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
-            {user?.image ? (
-              <img
-                src={user.image as string}
-                alt="Profile"
-                className="h-full w-full rounded-full object-cover"
-              />
-            ) : (
-              <FiUser className="w-6 h-6 text-gray-600" />
-            )}
-          </div>
-        </div>
-
-        <FiMenu className="lg:hidden" onClick={()=>setOpen(true)} />
+      <div className={s.titles}>
+        <h1 className={s.title}>{pageDesc?.title || "Dashboard"}</h1>
+        {pageDesc?.desc && <p className={s.desc}>{pageDesc.desc}</p>}
       </div>
-    </div>
+
+      <div className={s.actions}>
+        {WHATSAPP_URL ? (
+          <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className={s.help} aria-label="Help on WhatsApp">
+            <FaWhatsapp size={19} aria-hidden="true" />
+            <span className={s.helpLabel}>Help on WhatsApp</span>
+          </a>
+        ) : (
+          <Link to="/dashboard/community/team" className={s.help} aria-label="Get help from the AlignTraits team">
+            <MessageCircle size={18} aria-hidden="true" />
+            <span className={s.helpLabel}>Get help</span>
+          </Link>
+        )}
+        <button type="button" className={s.cta} onClick={() => navigate("/career-recommedation")}>
+          Career recommendation
+        </button>
+        <div className={s.who}>
+          <div className={s.whoName}>{[user?.firstname, user?.lastname].filter(Boolean).join(" ")}</div>
+          <div className={s.whoMeta}>{user?.email}</div>
+        </div>
+        <Link to="/dashboard/settings/profile" className={s.avatar} aria-label="Your profile">
+          {image ? <img src={image} alt="" /> : initials(user?.firstname, user?.lastname)}
+        </Link>
+      </div>
+    </header>
   );
 };
 
