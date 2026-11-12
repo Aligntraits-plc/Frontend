@@ -1,82 +1,58 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { MdOutlinePerson } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
-import { RiAdminLine } from "react-icons/ri";
 import AdminPassword from "../../components/Admin/AdminPassword";
-import AdminManagement from "../../components/Admin/AdminManagement";
 import PersonalDetails from "../../components/Admin/PersonalDetails";
-import { AdminUser } from "../../types/school.types";
+import { useAuth } from "../../contexts/useAuth";
 
+const TABS = [
+  { key: "details", label: "Personal details", icon: <MdOutlinePerson /> },
+  { key: "password", label: "Password", icon: <RiLockPasswordLine /> },
+] as const;
 
-const ADMIN_TAB = ["Personal Details", "Password"]
-
-const SUPER_ADMIN_TAB = ["Personal Details", "Password", "Admin Management"]
-
-export default function ProfileManagement () {
-  const [activeTab, setActiveTab] = useState("tab1");
-
-  const admin = localStorage.getItem("admin")
-  const adminData:AdminUser = admin ? JSON.parse(admin) : null;
-
-  const TAB = adminData.role === "SUPER_ADMIN" ? SUPER_ADMIN_TAB : ADMIN_TAB
-
-
-  const handleTabChange = (tab:string) => {
-    if (tab === "tab1") {
-      setActiveTab("tab1")
-    } else if (tab === "tab2") {
-      setActiveTab("tab2")
-    } else if (tab === "tab3") {
-      setActiveTab("tab3")
-    }
-  }
-
-  const tabImage = {
-    tab1: <MdOutlinePerson />,
-    tab2: <RiLockPasswordLine />,
-    tab3: <RiAdminLine />,
-  }
-
-  
+/* My account: every staff role can change their own details and password.
+   Managing other staff moved to Team (super admins only), where people are invited by email. */
+export default function ProfileManagement() {
+  const [activeTab, setActiveTab] = useState<(typeof TABS)[number]["key"]>("details");
+  const { admin } = useAuth();
+  const isSuper = (admin as any)?.role === "SUPER_ADMIN";
 
   return (
-    <div className="relative">
-      <div className="flex flex-col w-full gap-10 p-5 xl:p-6">
-      <div className="flex flex-col gap-y-[5px]">
-        <p className="text-[#101828] text-[24px] font-semibold">Profile Management</p>
-        <p className="font-normal text-[16px] text-[#737373]">Manage your personal details, security, and admin users.</p>
+    <div className="flex flex-col w-full gap-8 p-4 sm:p-5 xl:p-6">
+      <div className="flex flex-col gap-1">
+        <p className="text-[#101828] text-[22px] sm:text-[24px] font-semibold">My account</p>
+        <p className="text-[15px] text-[#667085]">Manage your personal details and password.</p>
       </div>
 
-      <div className="flex border-b border-gray-300 w-max">
-        {TAB.map((tab, index) => {
-          const tabKey = `tab${index + 1}` as keyof typeof tabImage;
-          return (
-            <button
-              key={tabKey}
-              className={`py-2 px-4 text-[16px] font-semibold border-b-2 font-medium transition flex items-center gap-x-2 
-                ${
-                  activeTab === tabKey
-                    ? "border-[#003064] text-[#003064] text-[16px] font-semibold"
-                    : "border-transparent hover:text-blue-500 text-[#999999]"
-                }`}
-              onClick={() => 
-                handleTabChange(tabKey)
-              }
-            >
-              {tabImage[tabKey]}
-              {tab}
-            </button>
-          );
-        })}
+      {isSuper && (
+        <div className="rounded-xl border border-[#D1E0FF] bg-[#F5F8FF] p-4 text-[14px] text-[#344054]">
+          To add or remove staff, or change someone's role, go to{" "}
+          <Link to="/admin/team" className="font-semibold text-[#004085] underline">
+            Team
+          </Link>
+          .
+        </div>
+      )}
+
+      <div className="flex border-b border-[#EAECF0] overflow-x-auto">
+        {TABS.map((tab) => (
+          <button
+            key={tab.key}
+            type="button"
+            className={`shrink-0 py-2 px-4 text-[15px] font-semibold border-b-2 transition flex items-center gap-x-2 ${
+              activeTab === tab.key ? "border-[#004085] text-[#004085]" : "border-transparent text-[#98A2B3] hover:text-[#004085]"
+            }`}
+            onClick={() => setActiveTab(tab.key)}
+          >
+            {tab.icon}
+            {tab.label}
+          </button>
+        ))}
       </div>
 
-      {
-        activeTab === "tab1" && <PersonalDetails />}
-        {activeTab === "tab2" && <AdminPassword />}
-        {activeTab === "tab3" && <AdminManagement />  
-      }
-
-      </div>
+      {activeTab === "details" && <PersonalDetails />}
+      {activeTab === "password" && <AdminPassword />}
     </div>
   );
 }

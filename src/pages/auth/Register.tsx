@@ -13,8 +13,13 @@ import Header from '../../components/Header';
 import { GOOGLE_AUTH_URL } from '../../constants/auth.constant'
 import { removeToken } from "../../services/auth.service";
 import PasswordChecker from '../../components/PasswordChecker'
+import { rememberJoinParams } from "../../services/pendingJoin";
 
 export default function Register() {
+  // Remember an ambassador's or a school's link until the student is signed in.
+  useEffect(() => {
+    rememberJoinParams(window.location.search);
+  }, []);
   const { register, isLoading, error } = useAuth();
   const navigate = useNavigate();
   const [credentials, setCredentials] = useState<SignUpCredentials>({

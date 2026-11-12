@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useAuth } from "../../contexts/useAuth";
 import { toast } from "react-toastify";
 import { BeatLoader } from "react-spinners";
 import {
@@ -67,11 +69,16 @@ const btnDanger = "h-10 rounded-lg border border-[#FDA29B] bg-white px-4 text-[1
 type Tab = "events" | "channels" | "reports" | "inbox";
 
 export default function CommunityAdmin() {
-  const [tab, setTab] = useState<Tab>("events");
+  const [params] = useSearchParams();
+  const { admin } = useAuth();
+  // Content managers look after exam dates and deadlines only.
+  const contentOnly = (admin as any)?.role === "CONTENT_MANAGER";
+  const [tab, setTab] = useState<Tab>((params.get("tab") as Tab) || "events");
   const [reportCount, setReportCount] = useState(0);
   const [inboxUnread, setInboxUnread] = useState(0);
 
   useEffect(() => {
+    if (contentOnly) return;
     adminGetReports()
       .then((r) => setReportCount(r.length))
       .catch(() => undefined);
@@ -80,19 +87,23 @@ export default function CommunityAdmin() {
       .catch(() => undefined);
   }, [tab]);
 
-  const tabs: { id: Tab; label: string; count?: number }[] = [
-    { id: "events", label: "Events" },
-    { id: "channels", label: "Channels" },
-    { id: "reports", label: "Reports", count: reportCount },
-    { id: "inbox", label: "Team inbox", count: inboxUnread },
-  ];
+  const tabs: { id: Tab; label: string; count?: number }[] = contentOnly
+    ? [{ id: "events", label: "Exam dates and deadlines" }]
+    : [
+        { id: "events", label: "Events" },
+        { id: "channels", label: "Channels" },
+        { id: "reports", label: "Reports", count: reportCount },
+        { id: "inbox", label: "Team inbox", count: inboxUnread },
+      ];
 
   return (
     <div className="flex w-full flex-col gap-5 p-4 sm:p-5 xl:p-6">
       <div>
-        <h1 className="text-[20px] font-bold text-[#101828] sm:text-[22px]">Community</h1>
+        <h1 className="text-[20px] font-bold text-[#101828] sm:text-[22px]">{contentOnly ? "Exam dates and deadlines" : "Community"}</h1>
         <p className="mt-1 max-w-[720px] text-[14px] text-[#475467]">
-          Post events, keep the channels safe and answer students who message the AlignTraits team. Times are West Africa Time (Lagos).
+          {contentOnly
+            ? "Keep official exam windows and admission deadlines accurate. Students see them in Community, Events. Times are West Africa Time (Lagos)."
+            : "Post events, approve events suggested by ambassadors, keep the channels safe and answer students who message the AlignTraits team. Times are West Africa Time (Lagos)."}
         </p>
       </div>
 
@@ -114,7 +125,7 @@ export default function CommunityAdmin() {
         ))}
       </div>
 
-      {tab === "events" && <EventsTab />}
+      {tab === "events" && <EventsTab contentOnly={contentOnly} showDrafts={params.get("show") === "drafts"} />}
       {tab === "channels" && <ChannelsTab />}
       {tab === "reports" && <ReportsTab onCount={setReportCount} />}
       {tab === "inbox" && <InboxTab onUnread={setInboxUnread} />}
@@ -190,7 +201,7 @@ const formFrom = (e: CommunityEvent): EventForm => ({
   recordingUrl: e.recordingUrl || "",
 });
 
-function EventsTab() {
+function EventsTab({ contentOnly, showDrafts }: { contentOnly: boolean; showDrafts: boolean }) {
   const [events, setEvents] = useState<CommunityEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState<EventForm | null>(null);
@@ -209,8 +220,22 @@ function EventsTab() {
   }, []);
 
   const now = Date.now();
-  const upcoming = events.filter((e) => new Date(e.endsAt || e.startsAt).getTime() >= now).reverse();
-  const past = events.filter((e) => new Date(e.endsAt || e.startsAt).getTime() < now);
+  const mine = contentOnly ? events.filter((e) => e.kind === "EXAM" || e.kind === "DEADLINE") : events;
+  // Ambassadors' suggestions wait here until an admin approves them.
+  const drafts = mine.filter((e) => e.status === "DRAFT");
+  const live = mine.filter((e) => e.status !== "DRAFT");
+  const upcoming = live.filter((e) => new Date(e.endsAt || e.startsAt).getTime() >= now).reverse();
+  const past = live.filter((e) => new Date(e.endsAt || e.startsAt).getTime() < now);
+
+  const approve = async (e: CommunityEvent) => {
+    try {
+      const saved = await adminUpdateEvent(e.id, { status: "SCHEDULED" });
+      setEvents((list) => list.map((x) => (x.id === saved.id ? { ...saved, suggestedBy: null } : x)));
+      toast.success("Approved. Students can see it now.");
+    } catch (err) {
+      toast.error(errorMessage(err));
+    }
+  };
 
   const set = <K extends keyof EventForm>(k: K, v: EventForm[K]) => setForm((f) => (f ? { ...f, [k]: v } : f));
 
@@ -303,6 +328,11 @@ function EventsTab() {
             {e.format === "ONLINE" ? "Online" : "In person"}
           </span>
           {e.status === "CANCELLED" && <span className="rounded-full bg-[#FEE4E2] px-2.5 py-0.5 text-[12px] font-semibold text-[#B42318]">Cancelled</span>}
+          {e.status === "DRAFT" && (
+            <span className="rounded-full bg-[#FEF6DD] px-2.5 py-0.5 text-[12px] font-semibold text-[#7A5A00]">
+              Waiting for approval{e.suggestedBy ? ` · suggested by ${e.suggestedBy}` : ""}
+            </span>
+          )}
         </div>
         <p className={`mt-1 text-[15px] font-semibold text-[#101828] ${e.status === "CANCELLED" ? "line-through" : ""}`}>{e.title}</p>
         <p className="text-[13px] text-[#667085]">
@@ -322,7 +352,11 @@ function EventsTab() {
         >
           Edit
         </button>
-        {e.status === "SCHEDULED" ? (
+        {e.status === "DRAFT" ? (
+          <button type="button" className={btnPrimary.replace("h-11", "h-10")} onClick={() => approve(e)}>
+            Approve
+          </button>
+        ) : e.status === "SCHEDULED" ? (
           <button type="button" className={btnDanger} onClick={() => cancel(e)}>
             Cancel event
           </button>
@@ -356,7 +390,7 @@ function EventsTab() {
             className={btnPrimary}
             onClick={() => {
               setEditing(null);
-              setForm(blankForm());
+              setForm(contentOnly ? { ...blankForm(), kind: "DEADLINE" } : blankForm());
               setFormError("");
             }}
           >
@@ -374,7 +408,9 @@ function EventsTab() {
             <label className={label}>
               Type
               <select className={input} value={form.kind} onChange={(e) => set("kind", e.target.value as EventKind)}>
-                {Object.entries(KIND_LABEL).map(([k, v]) => (
+                {Object.entries(KIND_LABEL)
+                  .filter(([k]) => !contentOnly || k === "EXAM" || k === "DEADLINE")
+                  .map(([k, v]) => (
                   <option key={k} value={k}>
                     {v}
                   </option>
@@ -521,6 +557,17 @@ function EventsTab() {
       ) : (
         <>
           <section className="rounded-2xl border border-[#EAECF0] bg-white">
+            {(drafts.length > 0 || showDrafts) && !contentOnly && (
+              <div className="border-b border-[#EAECF0] bg-[#FFFCF2]">
+                <h2 className="px-4 pt-3 text-[16px] font-semibold text-[#101828]">Waiting for approval ({drafts.length})</h2>
+                <p className="px-4 pb-1 text-[13px] text-[#667085]">Suggested by ambassadors. Edit if needed, then approve. Delete anything that is not right.</p>
+                {drafts.length === 0 ? (
+                  <p className="px-4 pb-4 text-[14px] text-[#475467]">Nothing waiting.</p>
+                ) : (
+                  <ul className="divide-y divide-[#EAECF0]">{drafts.map(row)}</ul>
+                )}
+              </div>
+            )}
             <h2 className="border-b border-[#EAECF0] px-4 py-3 text-[16px] font-semibold text-[#101828]">Upcoming ({upcoming.length})</h2>
             {upcoming.length === 0 ? (
               <p className="px-4 py-6 text-[14px] text-[#475467]">No upcoming events. Add the next live session or an official deadline.</p>

@@ -1,4 +1,5 @@
 import { useState, useEffect, ChangeEvent } from 'react';
+import SchoolPicker, { saveSchoolChoice, schoolChoiceProblem, type SchoolChoice } from '../../components/school/SchoolPicker';
 // import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import CustomSelect from '../../components/dashboard/CustomSelect';
@@ -43,6 +44,9 @@ const OnboardingPage = () => {
   })
 
   const [isLoading, setIsLoading] = useState(false)
+  // Optional: the student's secondary school (a school link from an invitation preselects it).
+  const [schoolChoice, setSchoolChoice] = useState<SchoolChoice>({ mode: 'none' })
+  const joinSchool = (() => { try { return localStorage.getItem('at_join_school') } catch { return null } })()
   
 
   const [errorObj, setErrorObj] = useState({
@@ -182,6 +186,12 @@ const OnboardingPage = () => {
       toast.error("Please fill all input fields!");
       return 
     }
+
+    const schoolProblem = schoolChoiceProblem(schoolChoice)
+    if (schoolProblem) {
+      toast.error(schoolProblem);
+      return
+    }
   
     let formatted = null
 
@@ -225,6 +235,16 @@ const OnboardingPage = () => {
       );
       console.log("response: ", response)
       if(response[0].ok) {
+        // The school is optional: a problem saving it never blocks onboarding.
+        if (schoolChoice.mode !== 'none') {
+          try {
+            const msg = await saveSchoolChoice(schoolChoice)
+            if (msg) toast.success(msg)
+            try { localStorage.removeItem('at_join_school') } catch { /* ignore */ }
+          } catch (e: any) {
+            toast.error(e?.response?.data?.message || 'We could not save your school. You can add it later in Profile and settings.')
+          }
+        }
         toast.success("Profile updated successfully");
         setTimeout(() => {
           // navigate("/dashboard")
@@ -434,6 +454,10 @@ return (
             />
           </div>
         </div>
+      </div>
+
+      <div className='mt-8 w-full max-w-[640px] mx-auto rounded-2xl border border-[#E4E9F0] bg-white p-4 sm:p-5'>
+        <SchoolPicker value={schoolChoice} onChange={setSchoolChoice} preselectId={joinSchool} />
       </div>
 
       <div className='mt-10 w-full flex justify-center'>

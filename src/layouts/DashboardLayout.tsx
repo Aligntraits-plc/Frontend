@@ -14,6 +14,7 @@ import {
 } from "../services/pendingCheck";
 import { RequirementList, SubjectGrade } from "../types/course.types";
 import "../styles/dashboard-brand.css";
+import { claimPendingReferral, pendingSchoolId } from "../services/pendingJoin";
 
 export default function DashboardLayout() {
   const {
@@ -94,8 +95,14 @@ export default function DashboardLayout() {
         setIsloading(true);
         try {
           response = await getUserDetails(token as string);
+          // School counsellors and admin staff have their own areas.
+          if (response?.data?.role === "COUNSELLOR") {
+            window.location.replace("/school-portal");
+            return;
+          }
           localStorage.setItem("user", JSON.stringify(response.data));
           setUser(response.data);
+          claimPendingReferral();
 
           // Finish an eligibility check that was waiting for this student to
           // log in, for example after paying before they had a password.
@@ -108,6 +115,7 @@ export default function DashboardLayout() {
         } finally {
           setIsloading(false);
 
+          if (!response?.data || response.data.role === "COUNSELLOR") return;
           if (response.data.firstname === "" || !response.data.gender) {
             return navigate("/onboarding-form");
           }
@@ -116,9 +124,17 @@ export default function DashboardLayout() {
             return navigate("/dashboard/school?tab=-1");
           }
 
+          // Came from a school's invite link: offer to add that school (with consent).
+          const joinSchool = pendingSchoolId();
+          if (joinSchool && !window.location.pathname.startsWith("/dashboard/settings/school")) {
+            return navigate(`/dashboard/settings/school?join=${joinSchool}`);
+          }
+
           // Students who open a Community link (for example an event reminder email)
           // go straight to it, without the first-time pop-ups on top.
           if (window.location.pathname.startsWith("/dashboard/community")) return;
+          // Nor while they are in settings (for example adding their school from an invite link).
+          if (window.location.pathname.startsWith("/dashboard/settings")) return;
 
           // For firsttime users
           if (!response.data?.careerResults) {

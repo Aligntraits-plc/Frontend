@@ -16,6 +16,8 @@ import AnalyticsTracker from "./components/AnalyticsTracker";
 
 import SettingsLayout from "./layouts/SettingsLayout";
 import WaitlistUser from "./pages/Waitlist";
+import RequireRole from "./components/Admin/RequireRole";
+import { ADMINS, CONTENT_TEAM, PANEL } from "./services/roles";
 // Lazy imports for code splitting
 
 const ErrorPage = lazy(() => import("./pages/ErrorPage"));
@@ -46,6 +48,26 @@ const BulkCenter = lazy(() => import("./pages/admin/BulkCenter"));
 const ProfileManagement = lazy(() => import("./pages/admin/ProfileManagement"));
 const SchoolCodes = lazy(() => import("./pages/admin/SchoolCodes"));
 const CommunityAdmin = lazy(() => import("./pages/admin/CommunityAdmin"));
+const Team = lazy(() => import("./pages/admin/Team"));
+const PartnerSchools = lazy(() => import("./pages/admin/PartnerSchools"));
+const Ambassadors = lazy(() => import("./pages/admin/Ambassadors"));
+const Requests = lazy(() => import("./pages/admin/Requests"));
+const AcceptInvite = lazy(() => import("./pages/invite/AcceptInvite"));
+const ParentReport = lazy(() => import("./pages/ParentReport"));
+const PortalLayout = lazy(() => import("./pages/school-portal/PortalLayout"));
+const PortalStudents = lazy(() => import("./pages/school-portal/Students"));
+const PortalInvite = lazy(() => import("./pages/school-portal/Invite"));
+const PortalSeats = lazy(() => import("./pages/school-portal/Seats"));
+const PortalSurvey = lazy(() => import("./pages/school-portal/Survey"));
+const PortalChannel = lazy(() => import("./pages/school-portal/SchoolChannel"));
+const PortalEvents = lazy(() => import("./pages/school-portal/PortalEvents"));
+const PortalAccount = lazy(() => import("./pages/school-portal/PortalAccount"));
+const PrintReport = lazy(() => import("./pages/school-portal/PrintReport"));
+const Workshop = lazy(() => import("./pages/dashboard/Workshop"));
+const AmbassadorPage2 = lazy(() => import("./pages/dashboard/Ambassador"));
+const MySchool = lazy(() => import("./pages/dashboard/MySchool"));
+const Classmates = lazy(() => import("./components/community/Classmates"));
+const DirectChat = lazy(() => import("./components/community/DirectChat"));
 const HomeSearch = lazy(() => import("./pages/HomeSearch"));
 const OnboardingPage = lazy(() => import("./pages/auth/OnboardingPage"));
 const GoogleAuthSuccess = lazy(() => import("./pages/auth/GoogleAuthSuccess"));
@@ -55,9 +77,7 @@ const CheckEligibility = lazy(() => import("./pages/CheckEligibility"));
 const SelectPayment = lazy(() => import("./pages/SelectPayment"));
 const PaymentPage = lazy(() => import("./pages/PaymentPage"));
 const CareerPath = lazy(() => import("./pages/dashboard/CareerPath"));
-const ProgressTracker = lazy(() => import("./pages/dashboard/ProgressTracker"));
 const SchoolPage = lazy(() => import("./pages/dashboard/SchoolPage"));
-const SkillRoadMap = lazy(() => import("./pages/dashboard/SkillRoadMap"));
 const AccountSettings = lazy(() => import("./pages/dashboard/AccountSettings"));
 const Profile = lazy(() => import("./pages/dashboard/Profile"));
 const AccountRecords = lazy(() => import("./pages/dashboard/AccountRecords"));
@@ -113,6 +133,24 @@ const router = createBrowserRouter([
   { path: "/waitlist", element: <WaitlistUser /> },
   { path: "/career-recommedation", element: <Recommendation /> },
   { path: "/questionaire", element: <Questionaire /> },
+  { path: "/invite/:token", element: <AcceptInvite /> },
+  { path: "/report/:token", element: <ParentReport /> },
+  {
+    path: "/school-portal",
+    element: <PortalLayout />,
+    errorElement: <ErrorPage />,
+    children: [
+      { index: true, element: <PortalStudents /> },
+      { path: "students/:id", element: <PortalStudents /> },
+      { path: "students/:id/report", element: <PrintReport /> },
+      { path: "invite", element: <PortalInvite /> },
+      { path: "seats", element: <PortalSeats /> },
+      { path: "survey", element: <PortalSurvey /> },
+      { path: "community", element: <PortalChannel /> },
+      { path: "events", element: <PortalEvents /> },
+      { path: "account", element: <PortalAccount /> },
+    ],
+  },
   { path: "/make-payment", element: <PaymentPage /> },
   { path: "/select-payment", element: <SelectPayment /> },
   { path: "/payment/callback", element: <PaymentCallback /> },
@@ -157,12 +195,16 @@ const router = createBrowserRouter([
           { path: "c/:slug", element: <ChannelView /> },
           { path: "team", element: <TeamChat /> },
           { path: "events", element: <EventsView /> },
+          { path: "classmates", element: <Classmates /> },
+          { path: "dm/:id", element: <DirectChat /> },
         ],
       },
       { path: "career-pathway", element: <CareerPath /> },
-      { path: "progres-tracker", element: <ProgressTracker /> },
+      { path: "progres-tracker", element: <Navigate to="/dashboard" replace /> },
       { path: "school", element: <SchoolPage /> },
-      { path: "skill-roadmap", element: <SkillRoadMap /> },
+      { path: "skill-roadmap", element: <Navigate to="/dashboard/workshop" replace /> },
+      { path: "workshop", element: <Workshop /> },
+      { path: "ambassador", element: <AmbassadorPage2 /> },
 
       {
         path: "settings",
@@ -173,6 +215,7 @@ const router = createBrowserRouter([
           { path: "records", element: <AccountRecords /> }, // /dashboard/settings/records
           { path: "security", element: <SecurityManagement /> }, // /dashboard/settings/security
           { path: "subscription", element: <Subscription /> },
+          { path: "school", element: <MySchool /> },
         ],
       },
     ],
@@ -187,24 +230,28 @@ const router = createBrowserRouter([
         element: <AdminDashboardLayout />,
         errorElement: <ErrorPage />,
         children: [
-          { index: true, element: <Admin /> },
-          { path: "accounts", element: <ProfileManagement /> },
-          { path: "bulk-center", element: <BulkCenter /> },
-          { path: "loans", element: <Loans /> },
-          { path: "data-management", element: <DataManagement /> },
-          { path: "waitlist", element: <Waitlist /> },
-          { path: "school-codes", element: <SchoolCodes /> },
-          { path: "community", element: <CommunityAdmin /> },
-          { path: "users", element: <UsersList /> },
-          { path: "schools", element: <Schools /> },
-          { path: "schools/:schoolId/courses", element: <SchoolCourses /> },
-          { path: "schools/:schoolId/add-course", element: <AddCourse /> },
+          { index: true, element: <RequireRole roles={ADMINS}><Admin /></RequireRole> },
+          { path: "accounts", element: <RequireRole roles={PANEL}><ProfileManagement /></RequireRole> },
+          { path: "requests", element: <RequireRole roles={ADMINS}><Requests /></RequireRole> },
+          { path: "team", element: <RequireRole roles={["SUPER_ADMIN"]}><Team /></RequireRole> },
+          { path: "partner-schools", element: <RequireRole roles={ADMINS}><PartnerSchools /></RequireRole> },
+          { path: "ambassadors", element: <RequireRole roles={ADMINS}><Ambassadors /></RequireRole> },
+          { path: "bulk-center", element: <RequireRole roles={CONTENT_TEAM}><BulkCenter /></RequireRole> },
+          { path: "loans", element: <RequireRole roles={ADMINS}><Loans /></RequireRole> },
+          { path: "data-management", element: <RequireRole roles={PANEL}><DataManagement /></RequireRole> },
+          { path: "waitlist", element: <RequireRole roles={ADMINS}><Waitlist /></RequireRole> },
+          { path: "school-codes", element: <RequireRole roles={ADMINS}><SchoolCodes /></RequireRole> },
+          { path: "community", element: <RequireRole roles={CONTENT_TEAM}><CommunityAdmin /></RequireRole> },
+          { path: "users", element: <RequireRole roles={ADMINS}><UsersList /></RequireRole> },
+          { path: "schools", element: <RequireRole roles={CONTENT_TEAM}><Schools /></RequireRole> },
+          { path: "schools/:schoolId/courses", element: <RequireRole roles={CONTENT_TEAM}><SchoolCourses /></RequireRole> },
+          { path: "schools/:schoolId/add-course", element: <RequireRole roles={CONTENT_TEAM}><AddCourse /></RequireRole> },
           {
             path: "schools/:schoolId/course-details/:courseId",
-            element: <CourseDetails />,
+            element: <RequireRole roles={CONTENT_TEAM}><CourseDetails /></RequireRole>,
           },
-          { path: "schools/create-course", element: <CreateCourse /> },
-          { path: "schools/edit-school", element: <EditSchool /> },
+          { path: "schools/create-course", element: <RequireRole roles={CONTENT_TEAM}><CreateCourse /></RequireRole> },
+          { path: "schools/edit-school", element: <RequireRole roles={CONTENT_TEAM}><EditSchool /></RequireRole> },
         ],
       },
       { path: "login", element: <AdminLogin /> },

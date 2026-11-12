@@ -17,6 +17,7 @@ import {
 import { useCommunity } from "./CommunityContext";
 import { refreshCommunitySummary } from "./summaryStore";
 import { Avatar, Composer, DayDivider, MessageText, msgTime, sameGroup, useStickToBottom } from "./ChatParts";
+import NameTag, { avatarClassFor } from "./NameTag";
 import { Dialog, ReportDialog } from "./Dialogs";
 import { dayKey, dayMedium, timeLabel } from "./eventUtils";
 import c from "./Chat.module.css";
@@ -173,7 +174,7 @@ export default function ChannelView() {
       createdAt: new Date().toISOString(),
       pinned: false,
       mine: true,
-      author: { name: me?.name || "You", initials: me?.initials || "", staff: !!me?.staff },
+      author: { name: me?.name || "You", initials: me?.initials || "", staff: !!me?.staff, badge: me?.badge ?? null },
       reactions: [],
       pending: true,
     };
@@ -526,13 +527,17 @@ function MessageItem({
   return (
     <div className={`${c.msg} ${grouped ? c.msgGrouped : ""} ${m.pending ? c.pending : ""}`}>
       <div className={c.gutter}>
-        {grouped ? <span className={c.gutterTime}>{msgTime(m.createdAt)}</span> : <Avatar initials={m.author.initials} staff={m.author.staff} />}
+        {grouped ? (
+          <span className={c.gutterTime}>{msgTime(m.createdAt)}</span>
+        ) : (
+          <Avatar initials={m.author.initials} staff={m.author.staff} extraClass={avatarClassFor(m.author.badge, m.author.staff)} />
+        )}
       </div>
       <div className={c.msgBody}>
         {!grouped && (
           <div className={c.msgHead}>
             <span className={c.name}>{m.author.name}</span>
-            {m.author.staff && <span className={ui.staffTag}>AlignTraits</span>}
+            <NameTag badge={m.author.badge} staff={m.author.staff} />
             <span className={c.time}>{m.pending ? "Sending..." : msgTime(m.createdAt)}</span>
             {m.pinned && <span className={c.pinnedTag}>Pinned</span>}
           </div>

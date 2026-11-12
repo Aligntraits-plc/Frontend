@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { CalendarDays, ChevronRight, Hash, MessageCircle, ShieldCheck, Users } from "lucide-react";
+import { CalendarDays, ChevronRight, Hash, MessageCircle, School, ShieldCheck, Users, UsersRound } from "lucide-react";
 import { useCommunity } from "./CommunityContext";
 import { useCommunitySummary } from "./summaryStore";
 import JumpTo from "./JumpTo";
@@ -10,13 +10,17 @@ import ui from "./ui.module.css";
 
 // Community home: what's next, the channels, and the AlignTraits team.
 export default function CommunityHome() {
-  const { channels, loading, error, reload, requestJoin, showRules } = useCommunity();
+  const { channels: allChannels, me, loading, error, reload, requestJoin, showRules } = useCommunity();
+  const channels = allChannels.filter((c) => !c.school);
+  const schoolChannels = allChannels.filter((c) => c.school);
   const summary = useCommunitySummary();
   const navigate = useNavigate();
   const [joining, setJoining] = useState<string | null>(null);
   const next = summary?.nextEvent ?? null;
   const joinedAny = channels.some((c) => c.joined);
   const teamUnread = summary?.unread.team ?? 0;
+  const classmatesUnread = (summary?.unread.direct ?? 0) + (summary?.unread.requests ?? 0);
+  const isStudent = !me?.staff && (me?.role === "USER" || !me?.role);
 
   const join = async (slug: string) => {
     setJoining(slug);
@@ -85,6 +89,40 @@ export default function CommunityHome() {
           </div>
         )}
       </section>
+
+      {/* The student's school: private to its students and counsellors */}
+      {schoolChannels.length > 0 && (
+        <section className={s.section} aria-labelledby="home-school">
+          <div className={s.sectionHead}>
+            <h3 id="home-school" className={s.sectionTitle}>
+              Your school
+            </h3>
+          </div>
+          <div className={s.cards}>
+            {schoolChannels.map((c) => (
+              <Link key={c.slug} to={`/dashboard/community/c/${c.slug}`} className={`${s.card} ${s.cardLink}`}>
+                <div className={s.cardTop}>
+                  <span className={s.hashTile} aria-hidden="true">
+                    <School size={22} />
+                  </span>
+                  <p className={s.cardName}>{c.name}</p>
+                </div>
+                <p className={s.cardText}>Only students and counsellors of your school can see this channel.</p>
+                <div className={s.cardFoot}>
+                  <Members c={c} />
+                  {c.unread > 0 ? (
+                    <span className={ui.badge} aria-label={`${c.unread} unread`}>
+                      {c.unread}
+                    </span>
+                  ) : (
+                    <ChevronRight size={18} aria-hidden="true" color="var(--at-slate)" />
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Channels */}
       <section className={s.section} aria-labelledby="home-channels">
@@ -182,6 +220,26 @@ export default function CommunityHome() {
             <MessageCircle size={20} aria-hidden="true" color="var(--at-slate)" />
           )}
         </Link>
+        {isStudent && (
+          <Link to="/dashboard/community/classmates" className={`${s.teamCard} ${s.cardLink}`} style={{ marginTop: 10 }}>
+            <span className={s.teamTile} aria-hidden="true" style={{ background: "var(--at-blue)" }}>
+              <UsersRound size={20} />
+            </span>
+            <span className={s.teamBody}>
+              <span className={s.cardName} style={{ display: "block" }}>
+                Classmates
+              </span>
+              <span className={s.cardText}>Find students from your school and chat privately once they accept.</span>
+            </span>
+            {classmatesUnread > 0 ? (
+              <span className={ui.badge} aria-label={`${classmatesUnread} new`}>
+                {classmatesUnread}
+              </span>
+            ) : (
+              <ChevronRight size={18} aria-hidden="true" color="var(--at-slate)" />
+            )}
+          </Link>
+        )}
       </section>
 
       <button type="button" className={s.rulesLink} onClick={showRules}>

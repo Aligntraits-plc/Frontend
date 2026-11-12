@@ -1,247 +1,126 @@
-
-import { NavLink, useLocation  } from "react-router-dom";
-import { useAuth } from "../../contexts/useAuth";
+import { NavLink, useLocation } from "react-router-dom";
 import { LuSchool } from "react-icons/lu";
-
-import Logo from "../../assets/logo.svg";
-import { FiGrid, FiKey, FiLogOut, FiMessageSquare, FiX } from "react-icons/fi";
+import { FiBell, FiGrid, FiKey, FiLogOut, FiMessageSquare, FiX } from "react-icons/fi";
 import { PiTextAlignCenterFill } from "react-icons/pi";
 import { TbMoneybag } from "react-icons/tb";
 import { TiGroupOutline } from "react-icons/ti";
-import { MdKeyboardArrowDown } from "react-icons/md";
-import { CgProfile } from "react-icons/cg";
-import { FaDatabase } from "react-icons/fa";
-import { FaUser } from "react-icons/fa";
+import { FaDatabase, FaUser, FaUserFriends } from "react-icons/fa";
 import { CiNoWaitingSign } from "react-icons/ci";
+import { MdOutlineSchool, MdOutlineStars } from "react-icons/md";
+import type { IconType } from "react-icons";
+import { useAuth } from "../../contexts/useAuth";
+import Logo from "../../assets/logo.svg";
+import { ADMINS, CONTENT_TEAM, PANEL, ROLE_LABELS } from "../../services/roles";
+import { useRequestsSummary } from "./requestsStore";
 
+type Item = { to: string; label: string; icon: IconType; roles: readonly string[]; badge?: number; end?: boolean };
 
-const SideBar = ({
-  open,
-  setOpen,
-}: {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+/* The admin menu. Each person only sees the sections their role can use. */
+const SideBar = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
   const { logout, admin } = useAuth();
-  // const navigate = useNavigate();
-  const location = useLocation()
+  const location = useLocation();
+  const role = (admin as any)?.role as string | undefined;
+  const isAdmin = !!role && ADMINS.includes(role as any);
+  const requests = useRequestsSummary(isAdmin);
+
+  const items: Item[] = [
+    { to: "/admin", label: "Overview", icon: FiGrid, roles: ADMINS, end: true },
+    { to: "/admin/requests", label: "Requests", icon: FiBell, roles: ADMINS, badge: requests?.total || 0 },
+    { to: "/admin/schools", label: "Schools and courses", icon: LuSchool, roles: CONTENT_TEAM },
+    { to: "/admin/partner-schools", label: "Partner schools", icon: MdOutlineSchool, roles: ADMINS },
+    { to: "/admin/school-codes", label: "School codes", icon: FiKey, roles: ADMINS },
+    { to: "/admin/ambassadors", label: "Ambassadors", icon: MdOutlineStars, roles: ADMINS },
+    { to: "/admin/community", label: role === "CONTENT_MANAGER" ? "Exam dates and deadlines" : "Community", icon: FiMessageSquare, roles: CONTENT_TEAM },
+    { to: "/admin/users", label: "Students", icon: FaUser, roles: ADMINS },
+    { to: "/admin/waitlist", label: "Waitlist", icon: CiNoWaitingSign, roles: ADMINS },
+    { to: "/admin/bulk-center", label: "Bulk center", icon: PiTextAlignCenterFill, roles: CONTENT_TEAM },
+    { to: "/admin/data-management", label: "Data management", icon: FaDatabase, roles: PANEL },
+    { to: "/admin/loans", label: "Loans", icon: TbMoneybag, roles: ADMINS },
+    { to: "/admin/team", label: "Team", icon: FaUserFriends, roles: ["SUPER_ADMIN"] },
+    { to: "/admin/accounts", label: "My account", icon: TiGroupOutline, roles: PANEL },
+  ];
+  const visible = role ? items.filter((i) => i.roles.includes(role)) : [];
 
   const handleLogout = async () => {
     try {
       await logout();
-      // navigate("/admin/login");
-      window.location.href = '/admin/login'
-    } catch (error) {
-      console.error("Logout failed:", error);
+    } finally {
+      try {
+        localStorage.removeItem("admin");
+      } catch {
+        /* ignore */
+      }
+      window.location.href = "/admin/login";
     }
   };
 
-  let schoolPath:boolean = location.pathname.startsWith("/admin/schools")
-  let bulkCenterPath:boolean = location.pathname.startsWith("/admin/bulk-center")
-  let accountPath:boolean = location.pathname.startsWith("/admin/accounts")
-  let dataManagementPath:boolean = location.pathname.startsWith("/admin/data-management")
-  let dataLoansPath:boolean = location.pathname.startsWith("/admin/loans")
-  let userPath:boolean = location.pathname.startsWith("/admin/users")
-  let waitlistPath:boolean = location.pathname.startsWith("/admin/waitlist")
-  let schoolCodesPath:boolean = location.pathname.startsWith("/admin/school-codes")
-  let communityPath:boolean = location.pathname.startsWith("/admin/community")
-  // let profilePath:boolean = location.pathname.startsWith("/admin/profile")
-
+  const name = (admin as any)?.username || [(admin as any)?.firstname, (admin as any)?.lastname].filter(Boolean).join(" ");
 
   return (
-    <div
-      className={`fixed z-20 lg:sticky top-0 left-0 h-screen w-[280px] bg-[#FAFAFA] border-[2px] border-[#E0E0E0] px-4 pt-8 flex flex-col transition-transform duration-300 ${
-        open ? "translate-x-0 " : "-translate-x-full lg:translate-x-0"
-      }`}
-    >
-      {/* Close Button */}
-      <FiX
-        className="absolute right-2 top-2 text-[#212121] w-6 h-6 cursor-pointer hover:animate-spin duration-50 lg:hidden"
+    <>
+      <div
+        className={`fixed inset-0 z-20 bg-[#101828]/40 lg:hidden transition-opacity ${open ? "opacity-100" : "pointer-events-none opacity-0"}`}
         onClick={() => setOpen(false)}
+        aria-hidden="true"
       />
-      {/* Logo */}
-      <div className="flex mx-auto mb-8 relative right-5 w-[150px]">
-        <img src={Logo} alt="AlignTraits Logo" />
-      </div>
-
-      {/* Navigation Links */}
-      <nav className="flex flex-col space-y-5 h-full overflow-y-auto">
-        <NavLink
-          to="/admin"
-          className={({ isActive }) =>
-            `flex items-center p-2 font-bold rounded-md transition-colors ${
-              isActive ? "text-white bg-[#004085]" : "text-[#5D5D5B] hover:bg-gray-100"
-            }`
-          }
-          end
-        >
-          <FiGrid className="w-5 h-5 mr-3" />
-          <span>Overview</span>
-        </NavLink>
-
-        <NavLink
-          to="/admin/schools"
-          className={({ isActive }) =>
-            `flex items-center p-2 font-bold rounded-md transition-colors ${
-              isActive || schoolPath ? "text-white bg-[#004085]" : "text-[#5D5D5B] hover:bg-gray-100"
-            }`
-          }
-          end
-        >
-          <LuSchool className="w-5 h-5 mr-3"  />
-          <span className={schoolPath ? "text-white bg-[#004085]" : "text-[#5D5D5B]"}>
-            Schools
-          </span>
-        </NavLink>
-
-        <NavLink
-          to="/admin/school-codes"
-          className={({ isActive }) =>
-            `flex items-center p-2 font-bold rounded-md transition-colors ${
-              isActive || schoolCodesPath ? "text-white bg-[#004085]" : "text-[#5D5D5B] hover:bg-gray-100"
-            }`
-          }
-          end
-        >
-          <FiKey className="w-5 h-5 mr-3" />
-          <span className={schoolCodesPath ? "text-white bg-[#004085]" : "text-[#5D5D5B]"}>
-            School codes
-          </span>
-        </NavLink>
-
-        <NavLink
-          to="/admin/community"
-          className={({ isActive }) =>
-            `flex items-center p-2 font-bold rounded-md transition-colors ${
-              isActive || communityPath ? "text-white bg-[#004085]" : "text-[#5D5D5B] hover:bg-gray-100"
-            }`
-          }
-          end
-        >
-          <FiMessageSquare className="w-5 h-5 mr-3" />
-          <span className={communityPath ? "text-white bg-[#004085]" : "text-[#5D5D5B]"}>
-            Community
-          </span>
-        </NavLink>
-
-        <NavLink
-          to="/admin/users"
-          className={({ isActive }) =>
-            `flex items-center p-2 font-bold rounded-md transition-colors ${
-              isActive || userPath ? "text-white bg-[#004085]" : "text-[#5D5D5B] hover:bg-gray-100"
-            }`
-          }
-          end
-        >
-          <FaUser className="w-5 h-5 mr-3" />
-          <span className={userPath ? "text-white bg-[#004085]" : "text-[#5D5D5B]"}>
-            Users
-          </span>
-        </NavLink>
-
-
-        <NavLink
-          to="/admin/waitlist"
-          className={({ isActive }) =>
-            `flex items-center p-2 font-bold rounded-md transition-colors ${
-              isActive || waitlistPath ? "text-white bg-[#004085]" : "text-[#5D5D5B] hover:bg-gray-100"
-            }`
-          }
-          end
-        >
-          <CiNoWaitingSign className="w-5 h-5 mr-3" />
-          <span className={waitlistPath ? "text-white bg-[#004085]" : "text-[#5D5D5B]"}>
-            Waitlist
-          </span>
-        </NavLink>
-
-        <NavLink
-          to="/admin/bulk-center"
-          className={({ isActive }) =>
-            `flex items-center p-2 font-bold rounded-md transition-colors ${
-              isActive || bulkCenterPath ? "text-white bg-[#004085]" : "text-[#5D5D5B] hover:bg-gray-100"
-            }`
-          }
-          end
-        >
-          <PiTextAlignCenterFill className="w-5 h-5 mr-3"  />
-          <span className={bulkCenterPath ? "text-white bg-[#004085]" : "text-[#5D5D5B]"}>
-            Bulk Center
-          </span>
-        </NavLink>
-
-        <NavLink
-          to="/admin/data-management"
-          className={({ isActive }) =>
-            `flex items-center p-2 font-bold rounded-md transition-colors ${
-              isActive || dataManagementPath ? "text-white bg-[#004085]" : "text-[#5D5D5B] hover:bg-gray-100"
-            }`
-          }
-          end
-        >
-          <FaDatabase className="w-5 h-5 mr-3" />
-          <span className={dataManagementPath ? "text-white bg-[#004085]" : "text-[#5D5D5B]"}>
-            Data Management
-          </span>
-        </NavLink>
-
-
-        <NavLink
-          to="/admin/loans"
-          className={({ isActive }) =>
-            `flex items-center p-2 font-bold rounded-md transition-colors ${
-              isActive || dataLoansPath ? "text-white bg-[#004085]" : "text-[#5D5D5B] hover:bg-gray-100"
-            }`
-          }
-          end
-        >
-          <TbMoneybag className="w-5 h-5 mr-3" />
-          <span className={dataLoansPath ? "text-white bg-[#004085]" : "text-[#5D5D5B]"}>
-            Loans
-          </span>
-        </NavLink>
-
-        <NavLink
-          to="/admin/accounts"
-          className={({ isActive }) =>
-            `flex items-center p-2 font-bold rounded-md transition-colors ${
-              isActive || accountPath ? "text-white bg-[#004085]" : "text-[#5D5D5B] hover:bg-gray-100"
-            }`
-          }
-          end
-        >
-          <TiGroupOutline className="w-5 h-5 mr-3" />
-          <span className={accountPath ? "text-white bg-[#004085]" : "text-[#5D5D5B]"}>
-            Accounts
-          </span>
-        </NavLink>
-
-        {/* Logout Button */}
-        <button
-          onClick={handleLogout}
-          className="flex items-center p-2 text-[#5D5D5B] font-bold rounded-md hover:bg-red-50 hover:text-red-500 transition-colors"
-        >
-          <FiLogOut className="w-5 h-5 mr-3" />
-          <span>Logout</span>
+      <aside
+        className={`fixed z-30 lg:sticky top-0 left-0 h-screen w-[272px] shrink-0 bg-white border-r border-[#EAECF0] px-4 pt-6 flex flex-col transition-transform duration-300 ${
+          open ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+        }`}
+        aria-label="Admin menu"
+      >
+        <button type="button" className="absolute right-3 top-3 rounded-md p-1 text-[#344054] lg:hidden" onClick={() => setOpen(false)} aria-label="Close menu">
+          <FiX className="w-6 h-6" />
         </button>
-      </nav>
-
-
-      <div className="h-[80px] w-full border-t border-t-2 border-gray-300 
-        flex flex-row justify-between items-center hover:bg-gray-100 cursor-pointer 
-        transition-colors duration-300">
-        <div className="flex flex-row items-center gap-x-[10px]">
-          <CgProfile className="w-7 h-7 " />
-          <div>
-            <p className="text-[14px]">{admin?.username}</p>
-            <p className="text-[12px] text-[#999999]">{admin?.email}</p>
-          </div>
+        <div className="mb-6 px-2 w-[150px]">
+          <img src={Logo} alt="AlignTraits" />
         </div>
 
-        <MdKeyboardArrowDown className="w-7 h-7" />
-      </div>
+        <nav className="flex flex-col gap-1 flex-1 overflow-y-auto pb-4">
+          {visible.map(({ to, label, icon: Icon, badge, end }) => {
+            const active = end ? location.pathname === to : location.pathname === to || location.pathname.startsWith(`${to}/`);
+            return (
+              <NavLink
+                key={to}
+                to={to}
+                end={end}
+                onClick={() => setOpen(false)}
+                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-semibold transition-colors ${
+                  active ? "bg-[#004085] text-white" : "text-[#475467] hover:bg-[#F2F4F7]"
+                }`}
+              >
+                <Icon className="w-5 h-5 shrink-0" aria-hidden="true" />
+                <span className="flex-1">{label}</span>
+                {badge ? (
+                  <span className="rounded-full bg-[#F6C648] px-2 text-[12px] font-bold text-[#002650]" aria-label={`${badge} new`}>
+                    {badge > 99 ? "99+" : badge}
+                  </span>
+                ) : null}
+              </NavLink>
+            );
+          })}
+        </nav>
 
-    </div>
+        <div className="border-t border-[#EAECF0] py-4">
+          <div className="flex items-center gap-3 px-2">
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#F6C648] text-[13px] font-bold text-[#002650]" aria-hidden="true">
+              {(name || "A").slice(0, 1).toUpperCase()}
+            </span>
+            <div className="min-w-0">
+              <p className="truncate text-[14px] font-semibold text-[#101828]">{name || "Your account"}</p>
+              <p className="truncate text-[12px] text-[#667085]">{role ? ROLE_LABELS[role] || role : ""}</p>
+            </div>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="mt-3 flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-semibold text-[#475467] hover:bg-[#FEF3F2] hover:text-[#B42318]"
+          >
+            <FiLogOut className="w-5 h-5" aria-hidden="true" />
+            Log out
+          </button>
+        </div>
+      </aside>
+    </>
   );
 };
 

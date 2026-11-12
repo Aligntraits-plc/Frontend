@@ -90,9 +90,9 @@ export function MessageText({ body }: { body: string }) {
 
 /* ----------------------------- Small pieces ----------------------------- */
 
-export function Avatar({ initials, staff = false }: { initials: string; staff?: boolean }) {
+export function Avatar({ initials, staff = false, extraClass = "" }: { initials: string; staff?: boolean; extraClass?: string }) {
   return (
-    <span className={`${ui.avatar} ${staff ? ui.avatarStaff : ""}`} aria-hidden="true">
+    <span className={`${ui.avatar} ${staff && !extraClass ? ui.avatarStaff : ""} ${extraClass}`} aria-hidden="true">
       {initials}
     </span>
   );

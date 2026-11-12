@@ -1,0 +1,30 @@
+.wrap { display: flex; flex-direction: column; gap: 20px; padding: 20px; max-width: 760px; }
+.head { display: flex; align-items: center; gap: 12px; }
+.back { display: none; color: var(--at-navy); padding: 6px; margin-left: -6px; border-radius: 8px; }
+.title { margin: 0; font-family: 'AT Fira Sans', sans-serif; font-weight: 700; font-size: 22px; color: var(--at-navy-deep); }
+.sub { margin: 2px 0 0; color: var(--at-slate, #475467); font-size: 14px; }
+.search { position: relative; }
+.search svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #98a2b3; }
+.search input {
+  width: 100%; height: 46px; border-radius: 12px; border: 1px solid #d0d5dd; padding: 0 14px 0 40px;
+  font-size: 15px; color: var(--at-ink, #101828); background: #fff;
+}
+.search input:focus { outline: none; border-color: var(--at-navy); box-shadow: 0 0 0 3px rgba(0, 64, 133, 0.12); }
+.sectionTitle { margin: 0 0 8px; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #667085; }
+.list { list-style: none; margin: 0; padding: 0; border: 1px solid #e4e9f0; border-radius: 14px; background: #fff; overflow: hidden; }
+.row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #f2f4f7; min-height: 64px; }
+.row:last-child { border-bottom: 0; }
+.rowLink { color: inherit; text-decoration: none; }
+.rowLink:hover { background: #f9fafb; }
+.rowMain { flex: 1; min-width: 0; }
+.name { margin: 0; font-weight: 600; font-size: 15px; color: var(--at-ink, #101828); display: flex; align-items: center; gap: 6px; }
+.meta { margin: 2px 0 0; font-size: 13px; color: #667085; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.unread { font-weight: 600; color: var(--at-ink, #101828); }
+.actions { display: flex; gap: 8px; flex-shrink: 0; }
+.note { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; background: #f5f8ff; color: #344054; font-size: 14px; line-height: 1.5; }
+.note svg { flex-shrink: 0; margin-top: 2px; color: var(--at-navy); }
+.status { font-size: 13px; color: #667085; white-space: nowrap; }
+@media (max-width: 1023px) {
+  .wrap { padding: 16px; }
+  .back { display: inline-flex; }
+}

@@ -10,7 +10,7 @@ export interface ChannelMessage {
   createdAt: string;
   pinned: boolean;
   mine: boolean;
-  author: { name: string; initials: string; staff: boolean };
+  author: { name: string; initials: string; staff: boolean; badge?: { kind: "team" | "ambassador" | "counsellor"; label: string } | null };
   reactions: Reaction[];
 }
 
@@ -25,6 +25,8 @@ export interface Channel {
   unread: number;
   lastMessageAt: string | null;
   recentMembers: { initials: string }[];
+  school?: boolean; // a partner school's private channel
+  mySchool?: boolean;
 }
 
 export type PostBlock = "VERIFY_EMAIL" | "MUTED" | null;
@@ -33,6 +35,9 @@ export interface CommunityMe {
   name: string;
   initials: string;
   staff: boolean;
+  role?: string;
+  badge?: { kind: "team" | "ambassador" | "counsellor"; label: string } | null;
+  hasSchool?: boolean;
   rulesAccepted: boolean;
   mutedUntil: string | null;
   postBlock: PostBlock;
@@ -46,7 +51,8 @@ export interface CommunityEvent {
   title: string;
   kind: EventKind;
   format: EventFormat;
-  status: "SCHEDULED" | "CANCELLED";
+  status: "SCHEDULED" | "CANCELLED" | "DRAFT";
+  suggestedBy?: string | null; // admin list: the ambassador who suggested a draft
   startsAt: string;
   endsAt: string | null;
   hostName: string | null;
@@ -73,8 +79,16 @@ export interface TeamMessage {
   author: { name: string; initials: string };
 }
 
+export interface CommunitySummaryUnread {
+  channels: number;
+  team: number;
+  direct?: number;
+  requests?: number;
+  total: number;
+}
+
 export interface CommunitySummary {
-  unread: { channels: number; team: number; total: number };
+  unread: CommunitySummaryUnread;
   eventsThisWeek: number;
   nextEvent: CommunityEvent | null;
 }
@@ -94,8 +108,9 @@ export const joinChannel = async (slug: string) => (await api.post(`/community/c
 export const leaveChannel = async (slug: string) => (await api.post(`/community/channels/${slug}/leave`)).data.data;
 
 export interface MessagesPage {
-  channel: { id: string; slug: string; name: string; description: string; welcome: string };
+  channel: { id: string; slug: string; name: string; description: string; welcome: string; school?: boolean };
   joined: boolean;
+  canModerate?: boolean;
   messages: ChannelMessage[];
   hasMore: boolean;
   reactions: Record<string, Reaction[]>;

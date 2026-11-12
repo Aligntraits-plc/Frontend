@@ -6,6 +6,7 @@ import { useCommunity } from "./CommunityContext";
 import { refreshCommunitySummary } from "./summaryStore";
 import { Avatar, Composer, DayDivider, MessageText, msgTime, sameGroup, useStickToBottom } from "./ChatParts";
 import { dayKey } from "./eventUtils";
+import NameTag, { avatarClassFor } from "./NameTag";
 import c from "./Chat.module.css";
 import ui from "./ui.module.css";
 
@@ -147,14 +148,14 @@ export default function TeamChat() {
                       {grouped ? (
                         <span className={c.gutterTime}>{msgTime(m.createdAt)}</span>
                       ) : (
-                        <Avatar initials={m.author.initials} staff={m.fromStaff} />
+                        <Avatar initials={m.author.initials} staff={m.fromStaff} extraClass={m.fromStaff ? avatarClassFor(null, true) : ""} />
                       )}
                     </div>
                     <div className={c.msgBody}>
                       {!grouped && (
                         <div className={c.msgHead}>
                           <span className={c.name}>{m.fromStaff ? m.author.name : "You"}</span>
-                          {m.fromStaff && <span className={ui.staffTag}>AlignTraits</span>}
+                          {m.fromStaff && <NameTag staff />}
                           <span className={c.time}>{m.pending ? "Sending..." : msgTime(m.createdAt)}</span>
                         </div>
                       )}

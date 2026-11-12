@@ -20,6 +20,8 @@ export interface Admin {
   role: string;
   id: string;
   username: string;
+  firstname?: string;
+  lastname?: string;
 }
 
 export interface PageDesc {

@@ -379,3 +379,44 @@
   font-size: 14px;
   line-height: 1.5;
 }
+
+/* Name tags in Community: the AlignTraits team in gold, ambassadors in blue,
+   school counsellors with a school icon and their school's name. */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 220px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+}
+.tag svg { flex-shrink: 0; }
+.tagTeam {
+  background: var(--at-gold, #f6c648);
+  color: var(--at-navy-deep, #002650);
+}
+.tagAmbassador {
+  background: #e8f1ff;
+  color: var(--at-blue-600, #0071ed);
+  box-shadow: inset 0 0 0 1px rgba(0, 113, 237, 0.25);
+}
+.tagCounsellor {
+  background: #f2f5f9;
+  color: var(--at-navy, #004085);
+  box-shadow: inset 0 0 0 1px #dbe4ee;
+}
+.avatarTeam {
+  background: var(--at-gold, #f6c648);
+  color: var(--at-navy-deep, #002650);
+}
+.avatarCounsellor {
+  background: var(--at-navy, #004085);
+  color: #fff;
+}

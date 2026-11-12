@@ -1,6 +1,6 @@
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
-import { CalendarDays, ChevronDown, Hash, ShieldCheck } from "lucide-react";
+import { CalendarDays, ChevronDown, Hash, School, ShieldCheck, UsersRound } from "lucide-react";
 import { toast } from "react-toastify";
 import { useAuth } from "../../contexts/useAuth";
 import {
@@ -126,6 +126,7 @@ export default function Community() {
   );
 
   const teamUnread = summary?.unread.team ?? 0;
+  const classmatesUnread = (summary?.unread.direct ?? 0) + (summary?.unread.requests ?? 0);
 
   return (
     <CommunityContext.Provider value={ctx}>
@@ -144,7 +145,7 @@ export default function Community() {
             Channels
           </button>
           {channelsOpen &&
-            channels.map((c) => (
+            channels.filter((c) => !c.school).map((c) => (
               <NavLink
                 key={c.slug}
                 to={`/dashboard/community/c/${c.slug}`}
@@ -157,6 +158,25 @@ export default function Community() {
               </NavLink>
             ))}
 
+          {channels.some((c) => c.school) && (
+            <>
+              <div className={s.panelSectionStatic}>Your school</div>
+              {channels
+                .filter((c) => c.school)
+                .map((c) => (
+                  <NavLink
+                    key={c.slug}
+                    to={`/dashboard/community/c/${c.slug}`}
+                    className={({ isActive }) => `${s.panelLink} ${isActive ? s.panelActive : ""} ${c.unread ? s.panelUnread : ""}`}
+                  >
+                    <School size={18} aria-hidden="true" />
+                    <span className={s.panelLabel}>{c.name}</span>
+                    {c.unread > 0 && <span className={s.panelBadge}>{c.unread > 99 ? "99+" : c.unread}</span>}
+                  </NavLink>
+                ))}
+            </>
+          )}
+
           <div className={s.panelSectionStatic}>Messages</div>
           <NavLink to="/dashboard/community/team" className={({ isActive }) => `${s.panelLink} ${isActive ? s.panelActive : ""} ${teamUnread ? s.panelUnread : ""}`}>
             <span className={s.teamAvatar} aria-hidden="true">
@@ -165,6 +185,13 @@ export default function Community() {
             <span className={s.panelLabel}>AlignTraits team</span>
             {teamUnread > 0 && <span className={s.panelBadge}>{teamUnread}</span>}
           </NavLink>
+          {(me?.role === "USER" || !me?.role) && !me?.staff && (
+            <NavLink to="/dashboard/community/classmates" className={({ isActive }) => `${s.panelLink} ${isActive ? s.panelActive : ""} ${classmatesUnread ? s.panelUnread : ""}`}>
+              <UsersRound size={18} aria-hidden="true" />
+              <span className={s.panelLabel}>Classmates</span>
+              {classmatesUnread > 0 && <span className={s.panelBadge}>{classmatesUnread}</span>}
+            </NavLink>
+          )}
 
           <button type="button" className={s.panelRules} onClick={ctx.showRules}>
             <ShieldCheck size={16} aria-hidden="true" />

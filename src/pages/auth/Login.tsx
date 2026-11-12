@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { rememberJoinParams } from "../../services/pendingJoin";
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../../contexts/useAuth'
 import { LoginCredentials, } from '../../types/auth.types'
@@ -14,6 +15,9 @@ import { removeToken } from '../../services/auth.service'
 // import { AxiosError } from 'axios'
 
 export default function Login() {
+  useEffect(() => {
+    rememberJoinParams(window.location.search);
+  }, []);
   const { login, isLoading, error } = useAuth()
   const navigate = useNavigate()
   const [credentials, setCredentials] = useState<LoginCredentials>({

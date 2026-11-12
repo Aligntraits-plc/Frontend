@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
+  BookOpen,
   Briefcase,
   GraduationCap,
   Home,
   LogOut,
-  Map,
   Settings,
-  TrendingUp,
+  Star,
   Users,
   X,
   type LucideIcon,
@@ -16,6 +16,7 @@ import { useAuth } from "../../contexts/useAuth";
 import LogoReversed from "../../assets/brand/aligntraits-logo-reversed.svg";
 import { useCommunitySummary } from "../community/summaryStore";
 import s from "./NewSidebar.module.css";
+import { useIsAmbassador } from "./ambassadorFlag";
 
 type Item = { to: string; label: string; icon: LucideIcon; end?: boolean; match?: string; badge?: number };
 
@@ -23,6 +24,7 @@ const SETTINGS = [
   { to: "/dashboard/settings", label: "Account settings", end: true },
   { to: "/dashboard/settings/profile", label: "Profile" },
   { to: "/dashboard/settings/records", label: "Academic records" },
+  { to: "/dashboard/settings/school", label: "My school" },
   { to: "/dashboard/settings/security", label: "Security" },
   { to: "/dashboard/settings/subscription", label: "Subscription" },
 ];
@@ -41,6 +43,7 @@ const NewSidebar = ({
   const { logout, user } = useAuth();
   const location = useLocation();
   const summary = useCommunitySummary();
+  const isAmbassador = useIsAmbassador();
   const closeRef = useRef<HTMLButtonElement>(null);
   const inSettings = location.pathname.startsWith("/dashboard/settings");
 
@@ -78,8 +81,8 @@ const NewSidebar = ({
     { to: "/dashboard/career-pathway", label: "Career path", icon: Briefcase },
     { to: "/dashboard/school", label: "School", icon: GraduationCap },
     { to: "/dashboard/community", label: "Community", icon: Users, badge: summary?.unread.total ?? 0 },
-    { to: "/dashboard/skill-roadmap", label: "Skill roadmap", icon: Map },
-    { to: "/dashboard/progres-tracker", label: "Progress tracker", icon: TrendingUp },
+    { to: "/dashboard/workshop", label: "Workshop", icon: BookOpen },
+    ...(isAmbassador ? [{ to: "/dashboard/ambassador", label: "Ambassador", icon: Star }] : []),
   ];
 
   const name = [user?.firstname, user?.lastname].filter(Boolean).join(" ") || "Your account";

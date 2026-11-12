@@ -24,7 +24,7 @@ export default function Login() {
 
   const [adminError, setAdminError] = useState("")
   const [passwordError, setPasswordError] = useState("")
-const {token} = useAuth()
+const { token, setToken: setSessionToken } = useAuth()
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -40,8 +40,12 @@ const {token} = useAuth()
 
           if (admin) {
             setToken(response.token);
+            // Also tell the app it is signed in now, so the panel opens without a page refresh.
+            setSessionToken(response.token);
             localStorage.setItem('admin', JSON.stringify(admin.data))
-            navigate("/admin")
+            // School counsellors use the school portal; everyone else the admin panel.
+            const role = admin.data?.role
+            navigate(role === "COUNSELLOR" ? "/school-portal" : role === "CONTENT_MANAGER" || role === "ANALYST" ? "/admin/schools" : "/admin")
           }
         } catch (e:any) {
           toast.error(e.message)
