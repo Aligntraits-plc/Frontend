@@ -8,9 +8,9 @@ import { School } from "../../services/schools";
 import courseImage from "../../assets/course.png";
 import { LiaTimesSolid } from "react-icons/lia";
 
+import schoolPlaceholder from "../../assets/school-placeholder.svg";
 // Default school logo
-const DEFAULT_SCHOOL_LOGO =
-  "https://kairosworldtravels.com/wp-content/uploads/2022/12/b.jpg";
+const DEFAULT_SCHOOL_LOGO = schoolPlaceholder;
 
 interface CoursesProps {
   courseItem: Course;
@@ -196,7 +196,7 @@ export default CourseCard;
 
 // // Default school logo
 // const DEFAULT_SCHOOL_LOGO =
-//   "https://kairosworldtravels.com/wp-content/uploads/2022/12/b.jpg";
+//   schoolPlaceholder;
 
 // interface CoursesProps {
 //   courseItem: Course;

@@ -352,9 +352,11 @@ export const FOOTER = {
     },
   ] satisfies readonly FooterColumn[],
   social: [
+    /* Only accounts with a real address are listed. Add LinkedIn, Instagram and Facebook
+       here once their addresses are confirmed; an entry with '#' is not shown. */
     { platform: 'linkedin', label: 'AlignTraits on LinkedIn', href: '#' },
     { platform: 'instagram', label: 'AlignTraits on Instagram', href: '#' },
-    { platform: 'tiktok', label: 'AlignTraits on TikTok', href: '#' },
+    { platform: 'tiktok', label: 'AlignTraits on TikTok', href: 'https://www.tiktok.com/@aligntraits' },
     { platform: 'facebook', label: 'AlignTraits on Facebook', href: '#' },
   ] satisfies readonly SocialLink[],
   bottomLine: 'Matches are never ranked by who pays us.',

@@ -12,7 +12,8 @@ interface NavItem {
   label: string;
 }
 
-export default function Subscription() {
+/* `framed` is set when the page sits inside the Profile and settings frame, which has its own heading. */
+export default function Subscription({ framed = false }: { framed?: boolean } = {}) {
   const { setPageDesc } = useAuth();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<string>("plan-overview");
@@ -51,13 +52,15 @@ export default function Subscription() {
   };
 
   return (
-    <div className="w-full h-full p-5 relative">
+    <div className={framed ? "w-full relative" : "w-full h-full p-5 relative"}>
+      {!framed && (
       <button onClick={handleNav} className="flex gap-x-[10px] items-center">
         <FaArrowLeftLong className="text-[#004085]" />
         <p className="text-[#004085]">Back to Explore</p>
       </button>
+      )}
 
-      <div className="mt-5">
+      <div className={framed ? "hidden" : "mt-5"}>
         <p className="text-[#212529] text-[18px] font-bold">
           Subscription Management
         </p>

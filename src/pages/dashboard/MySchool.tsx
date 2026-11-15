@@ -8,7 +8,8 @@ import SchoolPicker, { saveSchoolChoice, schoolChoiceProblem, type SchoolChoice 
 
 /* Profile and settings > My school: optional. Linking your school opens its private
    channel and classmate chats, and lets its counsellors see your results. */
-export default function MySchool() {
+/* `embedded` is for the Profile page, which opens this in a dialog. */
+export default function MySchool({ embedded = false, onChanged }: { embedded?: boolean; onChanged?: () => void } = {}) {
   const { setPageDesc } = useAuth();
   const [params] = useSearchParams();
   const [data, setData] = useState<MySchoolData | null>(null);
@@ -19,8 +20,8 @@ export default function MySchool() {
   const [confirmLeave, setConfirmLeave] = useState(false);
 
   useEffect(() => {
-    setPageDesc({ title: "My school", desc: "Your secondary school on AlignTraits" });
-  }, [setPageDesc]);
+    if (!embedded) setPageDesc({ title: "Profile and settings", desc: "" });
+  }, [setPageDesc, embedded]);
 
   const load = () => getMySchool().then(setData).catch((err) => setError(errorMessage(err)));
   useEffect(() => {
@@ -44,6 +45,7 @@ export default function MySchool() {
         /* ignore */
       }
       await load();
+      onChanged?.();
     } catch (err) {
       setError(errorCode(err) === "REMOVED" ? errorMessage(err) : errorMessage(err));
     } finally {
@@ -58,6 +60,7 @@ export default function MySchool() {
       toast.success(r.message);
       setConfirmLeave(false);
       await load();
+      onChanged?.();
     } catch (err) {
       toast.error(errorMessage(err));
     } finally {

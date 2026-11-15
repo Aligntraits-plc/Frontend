@@ -10,7 +10,7 @@ export const LINKS = {
   seeOpenScholarships: '/login',
   joinFree: '/signup',
   whatsapp: 'https://chat.whatsapp.com/LS7jfa4W5iFLP49rYoR9IX?mode=gi_t',
-  forUniversities: '#',
+  forUniversities: '/institutions/universities',
   forInvestors: '/finances/investors',
 } as const;
 

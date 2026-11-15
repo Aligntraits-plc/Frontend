@@ -229,8 +229,9 @@ export default function DashboardLayout() {
                 Welcome to AlignTraits 🎉
               </h2>
               <p className="mb-4">
-                Find the career path that’s truly right for you. Take our quick
-                assessment to get your personalized career recommendation.
+                See the courses and schools you can realistically get into, and
+                what year one will cost. Start with the free snapshot. It takes
+                a few minutes.
               </p>
               <button
                 onClick={() => {
@@ -239,7 +240,14 @@ export default function DashboardLayout() {
                 }}
                 className="w-full h-12 bg-[#004085] text-white rounded-lg hover:bg-blue-700"
               >
-                Start My Career Recommendation
+                Start my free snapshot
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowFirstTimeUser(false)}
+                className="mt-3 w-full py-2 text-[#004085] font-semibold"
+              >
+                Not now
               </button>
             </div>
           </div>

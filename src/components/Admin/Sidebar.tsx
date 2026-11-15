@@ -86,7 +86,7 @@ const SideBar = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch<Rea
                 end={end}
                 onClick={() => setOpen(false)}
                 className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-[14px] font-semibold transition-colors ${
-                  active ? "bg-[#004085] text-white" : "text-[#475467] hover:bg-[#F2F4F7]"
+                  active ? "bg-[#004085] !text-white hover:!text-white" : "text-[#475467] hover:bg-[#F2F4F7] hover:text-[#101828]"
                 }`}
               >
                 <Icon className="w-5 h-5 shrink-0" aria-hidden="true" />

@@ -14,8 +14,10 @@ export const ROUTES = {
   login: '/login',
   checkChances: '/career-recommedation',
   freeSnapshot: '/career-recommedation',
-  matchReport: '#',
-  fundingOptions: '#',
+  /* The paid match report starts from the free snapshot. */
+  matchReport: '/career-recommedation',
+  /* Scholarships first: money a family does not pay back. */
+  fundingOptions: '/finances/scholarships',
   forSchools: '/institutions/schools',
   forUniversities: '/institutions/universities',
   tutorialCenters: '/institutions/tutorial-centres',

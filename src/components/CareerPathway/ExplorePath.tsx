@@ -27,7 +27,8 @@ const traitColors: Record<string, string> = {
   neuroticism: "bg-rose-400",
 };
 
-const QUESTIONNAIRE_URL = "https://www.aligntrait.com/questionaire";
+// Where a shared result sends friends: the free snapshot on aligntraits.com.
+const QUESTIONNAIRE_URL = "https://aligntraits.com/career-recommedation";
 
 const ExplorePath = ({
   careerPath,
@@ -44,7 +45,9 @@ const ExplorePath = ({
   const [showAddCourse, setShowAddCourse] = useState(false);
   const [recordList, setRecordList] = useState<RequirementListNew[]>([]);
 
-  const testObj = careerPath.richRecommendations.find(
+  // Older results were saved without the detailed breakdown, so never assume the list is there.
+  const richList = Array.isArray(careerPath?.richRecommendations) ? careerPath.richRecommendations : [];
+  const testObj = richList.find(
     (course: any) => course.career === explorePath
   );
 
@@ -171,10 +174,10 @@ const ExplorePath = ({
 
       const fileName = `${career
         .replace(/\s+/g, "-")
-        .toLowerCase()}-personality-breakdown.png`;
+        .toLowerCase()}-aligntraits-result.png`;
       const file = new File([blob], fileName, { type: "image/png" });
 
-      const shareText = `Check out my "${career}" personality breakdown! Take your own assessment here: ${QUESTIONNAIRE_URL}`;
+      const shareText = `I checked my "${career}" fit on AlignTraits. See the courses and schools that fit you, free: ${QUESTIONNAIRE_URL}`;
 
       // Native share sheet (mobile / supported browsers)
       if (

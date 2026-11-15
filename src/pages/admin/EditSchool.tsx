@@ -10,6 +10,7 @@ import { ClipLoader } from "react-spinners";
 import DeleteSchoolModal from "../../components/Admin/DeleteSchoolModal";
 import { Course } from "../../types/course.types";
 import EditSchoolModal from "../../components/Admin/EditSchoolModal";
+import { useAuth } from "../../contexts/useAuth";
 
 interface SchoolWithCourses extends School {
   courses: Course[];
@@ -18,6 +19,7 @@ interface SchoolWithCourses extends School {
 export default function EditSchool() {
   const navigate = useNavigate()
   const id = new URLSearchParams(useLocation().search).get("id");
+  const { setCurrentCourseID } = useAuth();
   const [school, setSchool] = useState<SchoolWithCourses>();
   const [isLoading, setIsLoading] = useState(true);
   const [modal, setModal] = useState(false);
@@ -149,7 +151,10 @@ export default function EditSchool() {
                   <EditCourseCard
                     course={course}
                     key={index}
-                    onEdit={(course) => navigate(`/admin/schools/create-course?id=${course.id}`)}
+                    onEdit={(course) => {
+                      setCurrentCourseID(course.id as string);
+                      navigate(`/admin/schools/${id}/add-course`);
+                    }}
                     onDelete={(course) => deleteCourse(course)}
                     schoolLogo={school?.logo as string}
                     schoolName={school?.name as string}

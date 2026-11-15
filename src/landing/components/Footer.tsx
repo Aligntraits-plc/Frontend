@@ -54,10 +54,12 @@ export function Footer() {
       <div className="border-t-2 border-at-line">
         <div className={cx(pageColumn, 'flex flex-col gap-4 pb-6 pt-6 xl:flex-row xl:items-center')}>
           <ul className="flex gap-7 xl:gap-3">
-            {FOOTER.social.map((item) => (
+            {FOOTER.social.filter((item) => item.href !== '#').map((item) => (
               <li key={item.platform}>
                 <a
                   href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={item.label}
                   className={cx(
                     '-m-3.5 flex h-11 w-11 items-center justify-center rounded-md text-at-slate xl:-m-1.5 xl:h-7 xl:w-7 transition-colors hover:text-at-ink motion-reduce:transition-none',

@@ -30,8 +30,8 @@ export const LINKS = {
   join: '/signup',
   forSchools: ROUTES.forSchools,
   applyAmbassador: ROUTES.ambassadors,
-  /* No page yet: the Insider plan page. */
-  insiders: '#',
+  /* The Insider plan has no page of its own yet, so this opens the plans. */
+  insiders: '/select-payment',
   /* The WhatsApp group used for enquiries (same link as the flyers and the Scholarships page). */
   whatsapp: 'https://chat.whatsapp.com/LS7jfa4W5iFLP49rYoR9IX?mode=gi_t',
 } as const;

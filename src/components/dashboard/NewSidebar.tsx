@@ -20,15 +20,6 @@ import { useIsAmbassador } from "./ambassadorFlag";
 
 type Item = { to: string; label: string; icon: LucideIcon; end?: boolean; match?: string; badge?: number };
 
-const SETTINGS = [
-  { to: "/dashboard/settings", label: "Account settings", end: true },
-  { to: "/dashboard/settings/profile", label: "Profile" },
-  { to: "/dashboard/settings/records", label: "Academic records" },
-  { to: "/dashboard/settings/school", label: "My school" },
-  { to: "/dashboard/settings/security", label: "Security" },
-  { to: "/dashboard/settings/subscription", label: "Subscription" },
-];
-
 const initials = (first?: string, last?: string) =>
   `${(first || "").trim()[0] || ""}${(last || "").trim()[0] || ""}`.toUpperCase() || "A";
 
@@ -123,20 +114,6 @@ const NewSidebar = ({
             <Settings size={20} strokeWidth={1.9} aria-hidden="true" />
             <span className={s.label}>Profile and settings</span>
           </NavLink>
-          {inSettings && (
-            <div className={s.subList}>
-              {SETTINGS.map((sub) => (
-                <NavLink
-                  key={sub.to}
-                  to={sub.to}
-                  end={sub.end}
-                  className={({ isActive }) => `${s.sub} ${isActive ? s.subActive : ""}`}
-                >
-                  {sub.label}
-                </NavLink>
-              ))}
-            </div>
-          )}
         </nav>
 
         <div className={s.footer}>

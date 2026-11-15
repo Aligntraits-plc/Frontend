@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Menu } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { useAuth } from "../../contexts/useAuth";
@@ -21,7 +21,6 @@ const Header = ({
   hideOnMobile?: boolean;
 }) => {
   const { user, pageDesc } = useAuth();
-  const navigate = useNavigate();
   const image = typeof user?.image === "string" && user.image ? user.image : null;
 
   return (
@@ -40,14 +39,7 @@ const Header = ({
           <FaWhatsapp size={19} aria-hidden="true" />
           <span className={s.helpLabel}>Help on WhatsApp</span>
         </a>
-        <button type="button" className={s.cta} onClick={() => navigate("/career-recommedation")}>
-          Career recommendation
-        </button>
-        <div className={s.who}>
-          <div className={s.whoName}>{[user?.firstname, user?.lastname].filter(Boolean).join(" ")}</div>
-          <div className={s.whoMeta}>{user?.email}</div>
-        </div>
-        <Link to="/dashboard/settings/profile" className={s.avatar} aria-label="Your profile">
+        <Link to="/dashboard/settings" className={s.avatar} aria-label="Profile and settings">
           {image ? <img src={image} alt="" /> : initials(user?.firstname, user?.lastname)}
         </Link>
       </div>

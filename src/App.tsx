@@ -15,7 +15,6 @@ import Root from "./layouts/Root";
 import AnalyticsTracker from "./components/AnalyticsTracker";
 
 import SettingsLayout from "./layouts/SettingsLayout";
-import WaitlistUser from "./pages/Waitlist";
 import RequireRole from "./components/Admin/RequireRole";
 import { ADMINS, CONTENT_TEAM, PANEL } from "./services/roles";
 // Lazy imports for code splitting
@@ -37,7 +36,6 @@ const EventsView = lazy(() => import("./components/community/EventsView"));
 const Admin = lazy(() => import("./pages/admin/Index"));
 const AdminLogin = lazy(() => import("./pages/admin/Login"));
 const Schools = lazy(() => import("./pages/admin/Schools"));
-const CreateCourse = lazy(() => import("./pages/admin/CreateCourse"));
 const EditSchool = lazy(() => import("./pages/admin/EditSchool"));
 const SchoolCourses = lazy(() => import("./pages/admin/SchoolCourses"));
 const AddCourse = lazy(() => import("./pages/admin/AddCourse"));
@@ -75,18 +73,15 @@ const Recommendation = lazy(() => import("./pages/Recommendation"));
 const Questionaire = lazy(() => import("./pages/Questionaire"));
 const CheckEligibility = lazy(() => import("./pages/CheckEligibility"));
 const SelectPayment = lazy(() => import("./pages/SelectPayment"));
-const PaymentPage = lazy(() => import("./pages/PaymentPage"));
 const CareerPath = lazy(() => import("./pages/dashboard/CareerPath"));
 const SchoolPage = lazy(() => import("./pages/dashboard/SchoolPage"));
-const AccountSettings = lazy(() => import("./pages/dashboard/AccountSettings"));
-const Profile = lazy(() => import("./pages/dashboard/Profile"));
-const AccountRecords = lazy(() => import("./pages/dashboard/AccountRecords"));
-const SecurityManagement = lazy(
-  () => import("./pages/dashboard/SecurityManagement"),
-);
+const SettingsHub = lazy(() => import("./pages/dashboard/settings/SettingsHub"));
+const ProfileSettings = lazy(() => import("./pages/dashboard/settings/ProfileSettings"));
+const AcademicSettings = lazy(() => import("./pages/dashboard/settings/AcademicSettings"));
+const SecuritySettings = lazy(() => import("./pages/dashboard/settings/SettingsFrames").then((m) => ({ default: m.SecuritySettings })));
+const BillingSettings = lazy(() => import("./pages/dashboard/settings/SettingsFrames").then((m) => ({ default: m.BillingSettings })));
 const PaymentCallback = lazy(() => import("./pages/PaymentCallback"));
 const SignUpTwo = lazy(() => import("./pages/auth/RegisterTwo"));
-const Subscription = lazy(() => import("./pages/dashboard/Subscription"));
 const Page404 = lazy(() => import("./pages/404"));
 const SetupPassword = lazy(() => import("./pages/auth/SetupPassword"));
 const UsersList = lazy(() => import("./pages/admin/Users"));
@@ -130,7 +125,8 @@ const router = createBrowserRouter([
   },
   { path: "/auth/success", element: <GoogleAuthSuccess /> },
   { path: "/search", element: <HomeSearch /> },
-  { path: "/waitlist", element: <WaitlistUser /> },
+  // The pre-launch waitlist page is retired. Old links open the home page.
+  { path: "/waitlist", element: <Navigate to="/" replace /> },
   { path: "/career-recommedation", element: <Recommendation /> },
   { path: "/questionaire", element: <Questionaire /> },
   { path: "/invite/:token", element: <AcceptInvite /> },
@@ -151,7 +147,8 @@ const router = createBrowserRouter([
       { path: "account", element: <PortalAccount /> },
     ],
   },
-  { path: "/make-payment", element: <PaymentPage /> },
+  // The old payment page is retired. Old links open the plans.
+  { path: "/make-payment", element: <Navigate to="/select-payment" replace /> },
   { path: "/select-payment", element: <SelectPayment /> },
   { path: "/payment/callback", element: <PaymentCallback /> },
   { path: "/check-eligibility/:courseId", element: <CheckEligibility /> },
@@ -210,11 +207,11 @@ const router = createBrowserRouter([
         path: "settings",
         element: <SettingsLayout />, // <-- Add this line
         children: [
-          { index: true, element: <AccountSettings /> }, // /dashboard/settings
-          { path: "profile", element: <Profile /> }, // /dashboard/settings/profile
-          { path: "records", element: <AccountRecords /> }, // /dashboard/settings/records
-          { path: "security", element: <SecurityManagement /> }, // /dashboard/settings/security
-          { path: "subscription", element: <Subscription /> },
+          { index: true, element: <SettingsHub /> }, // /dashboard/settings
+          { path: "profile", element: <ProfileSettings /> }, // /dashboard/settings/profile
+          { path: "records", element: <AcademicSettings /> }, // /dashboard/settings/records
+          { path: "security", element: <SecuritySettings /> }, // /dashboard/settings/security
+          { path: "subscription", element: <BillingSettings /> },
           { path: "school", element: <MySchool /> },
         ],
       },
@@ -250,7 +247,8 @@ const router = createBrowserRouter([
             path: "schools/:schoolId/course-details/:courseId",
             element: <RequireRole roles={CONTENT_TEAM}><CourseDetails /></RequireRole>,
           },
-          { path: "schools/create-course", element: <RequireRole roles={CONTENT_TEAM}><CreateCourse /></RequireRole> },
+          // The old course form is retired. Editing a course uses the same form as adding one.
+          { path: "schools/create-course", element: <Navigate to="/admin/schools" replace /> },
           { path: "schools/edit-school", element: <RequireRole roles={CONTENT_TEAM}><EditSchool /></RequireRole> },
         ],
       },

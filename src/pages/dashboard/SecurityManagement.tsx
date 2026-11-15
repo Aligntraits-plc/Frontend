@@ -92,8 +92,8 @@ export default function SkillRoadMap() {
     };
 
   return (
-    <div className="p-5 relative">
-      <div className="mt-3 lg:mt-10 border-[1px] border-[#EAECF0] flex flex-col gap-y-[15px] shadow-md rounded-xl p-5 w-[100%] size-max">
+    <div className="relative">
+      <div className="border-[1px] border-[#EAECF0] flex flex-col gap-y-[15px] shadow-md rounded-xl p-5 w-[100%] size-max">
         <div>
           <p className="text-[#212529] text-[18px] font-bold">Security & Password</p>
           <p className='text-[12px] text-[#757575] mt-2'>Update your password and manage account security.</p>
