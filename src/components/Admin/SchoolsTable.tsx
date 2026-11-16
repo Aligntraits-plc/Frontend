@@ -95,8 +95,8 @@ export default function SchoolsTable({
       )}
 
       {!isLoading && (
-        <div className="w-full h-[400px] border-gray-300 overflow-y-scroll relative">
-          <table className="w-full table-auto space-y-4">
+        <div className="at-rtable-wrap w-full h-[400px] border-gray-300 overflow-y-scroll relative">
+          <table className="at-rtable w-full table-auto space-y-4">
             <thead className="border-b-[0.8px] border-[#EAECF0] p-[20px] bg-white sticky top-0">
               <tr className="[&>th]:text-[#000000] [&>th]:text-[14px] [&>th]:font-medium [&>th]:pb-2">
                 <th className="w-[16%] p-[20px]">
@@ -139,7 +139,7 @@ export default function SchoolsTable({
                     className="[&>td]:py-5 hover:bg-[#007BFF33] border-b border-gray-300 cursor-pointer"
                     key={index + school.id}
                   >
-                    <td className="text-[#000000] text-[16px] font-[400] p-[20px] flex gap-2 items-center">
+                    <td data-label="Name" data-primary="" className="text-[#000000] text-[16px] font-[400] p-[20px] flex gap-2 items-center">
                       <div onClick={(e) => handleSelect(e, school.id)} className="cursor-pointer border-[#D0D5DD] border-[1px] h-[25px] w-[25px] rounded-md flex justify-center items-center">
                         {
                           selectedSchoolList.includes(school.id) && 
@@ -157,13 +157,13 @@ export default function SchoolsTable({
                         {/* {school.name} */ shortenString(school.name)}
                       </span>
                     </td>
-                    <td className="text-[#757575] text-[14px] font-[500] p-[20px]">{school.country}, {school.region}</td>
-                    <td className="text-[#757575] text-[14px] font-[500] p-[20px]">{school._count?.courses}</td>
-                    <td className="text-[#757575] text-[14px] font-[500] p-[20px]">
+                    <td data-label="Location" className="text-[#757575] text-[14px] font-[500] p-[20px]">{school.country}, {school.region}</td>
+                    <td data-label="Courses" className="text-[#757575] text-[14px] font-[500] p-[20px]">{school._count?.courses}</td>
+                    <td data-label="Last Modified" className="text-[#757575] text-[14px] font-[500] p-[20px]">
                       {formatDate(school.updatedAt)}
                     </td>
-                    <td className="text-[#757575] text-[14px] font-[500] p-[20px]">{renderType(school.schoolType)}</td>
-                    <td className="p-[20px] flex gap-x-[10px]" onClick={(e) => handleViewClick(e, school)}>
+                    <td data-label="Type" className="text-[#757575] text-[14px] font-[500] p-[20px]">{renderType(school.schoolType)}</td>
+                    <td data-label="Action" data-actions="" className="p-[20px] flex gap-x-[10px]" onClick={(e) => handleViewClick(e, school)}>
                       <p className="text-[#1E1E1E] text-[14px] font-medium cursor-pointer">View</p>
                       <GoArrowUpRight className="text-[#1E1E1E] h-5 w-5" />
                     </td>

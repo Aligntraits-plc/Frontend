@@ -808,3 +808,14 @@
   margin-top: 2px;
   color: var(--at-navy);
 }
+
+/* Bigger tap targets on phones. */
+@media (max-width: 640px) {
+  .tool {
+    width: 44px;
+    height: 44px;
+  }
+  .input {
+    min-height: 44px;
+  }
+}

@@ -33,7 +33,12 @@ const AdminPassword = () => {
   
 
 
-  const handleCancel = () => {}
+  // Cancel clears what was typed.
+  const handleCancel = () => {
+    setCurrentPassword("");
+    setNewPassword("");
+    setConfirmPassword("");
+  }
 
   const [errorObj, setErrorObj] = useState<ErrorObjType>({
     currentPassword: false,
@@ -84,8 +89,6 @@ const AdminPassword = () => {
         newPassword,
         confirmPassword
       }
-  
-      console.log("payload: ", JSON.stringify(payload))
 
       try {
         setIsLoading(true)
@@ -117,10 +120,10 @@ const AdminPassword = () => {
 
 
   return (
-    <div className="w-full size-max bg-[#FAFAFA] border-[1px] border-[#E0E0E0] rounded-lg flex flex-col justify-between gap-6 p-5">
+    <div className="w-full min-w-0 bg-[#FAFAFA] border-[1px] border-[#E0E0E0] rounded-lg flex flex-col justify-between gap-6 p-5">
       <div>
-        <p className="text-[#101828] text-[20px] font-semibold">Persona Details</p>
-        <p className="text-[#737373] text-[14px] font-normal">Update your personal information. This information is used to identify you on the platform.</p>
+        <p className="text-[#101828] text-[20px] font-semibold">Password</p>
+        <p className="text-[#737373] text-[14px] font-normal">Change the password you use to sign in.</p>
       </div>
 
       <div className="flex flex-col gap-y-[10px] w-full relative">
@@ -136,7 +139,7 @@ const AdminPassword = () => {
         <button
           type="button"
           onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-          className="absolute right-3 top-[55px] -translate-y-1/2"
+          className="absolute right-1 top-[55px] flex h-11 w-11 -translate-y-1/2 items-center justify-center"
         >
           {showCurrentPassword ? (
             <AiOutlineEyeInvisible size={20} />
@@ -160,7 +163,7 @@ const AdminPassword = () => {
         <button
           type="button"
           onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-[55px] -translate-y-1/2"
+          className="absolute right-1 top-[55px] flex h-11 w-11 -translate-y-1/2 items-center justify-center"
         >
           {showPassword ? (
             <AiOutlineEyeInvisible size={20} />
@@ -184,7 +187,7 @@ const AdminPassword = () => {
         <button
           type="button"
           onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-          className="absolute right-3 top-[55px] -translate-y-1/2"
+          className="absolute right-1 top-[55px] flex h-11 w-11 -translate-y-1/2 items-center justify-center"
         >
           {showConfirmPassword ? (
             <AiOutlineEyeInvisible size={20} />
@@ -195,10 +198,10 @@ const AdminPassword = () => {
         <p className="text-[#737373] text-[12px] font-normal">Password must be at least 8 characters and include at least one uppercase letter, one lowercase letter, one number, and one special character.</p>
       </div>
 
-      <div className="flex gap-x-[20px] mt-[20px] w-full flex justify-end">
-        <button type="button" onClick={handleCancel} className="rounded-lg w-[150px] h-[40px] border-[1px] border-[#DDDDDD] text-[14px] text-[#1E1E1E] semi-bold cursor-pointer">Cancel</button>
+      <div className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-x-[20px] mt-[20px] w-full sm:justify-end">
+        <button type="button" onClick={handleCancel} className="rounded-lg w-full sm:w-[150px] h-[44px] sm:h-[40px] border-[1px] border-[#DDDDDD] text-[14px] text-[#1E1E1E] semi-bold cursor-pointer">Cancel</button>
 
-        <button type="button" onClick={handleSubmit} className="rounded-lg w-[150px] h-[40px] bg-[#004085] text-[14px] text-[white] semi-bold cursor-pointer">
+        <button type="button" onClick={handleSubmit} className="rounded-lg w-full sm:w-[150px] h-[44px] sm:h-[40px] bg-[#004085] text-[14px] text-[white] semi-bold cursor-pointer">
           {isLoading ? <BeatLoader /> : "Save Changes"}
         </button>
 

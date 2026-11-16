@@ -24,7 +24,7 @@ const PersonalDetails = () => {
     phone: false,
   });
 
-  useEffect(() => {
+  const loadSaved = () => {
     const admin = localStorage.getItem("admin")
     const adminData = admin ? JSON.parse(admin) : null;
   
@@ -38,10 +38,18 @@ const PersonalDetails = () => {
         setPhone("");
       }
     }
+  }
+
+  useEffect(() => {
+    loadSaved()
   }, [])
 
 
-  const handleCancel = () => {}
+  // Cancel puts back the saved details.
+  const handleCancel = () => {
+    loadSaved()
+    setErrorObj({ firstName: false, lastName: false, phone: false })
+  }
 
   const checkAllFields = () => {
     if (firstName.length === 0) {
@@ -118,14 +126,14 @@ const PersonalDetails = () => {
 
 
   return (
-    <div className="w-full h-[370px] bg-[#FAFAFA] border-[1px] border-[#E0E0E0] rounded-lg flex flex-col justify-between gap-6 p-5">
+    <div className="w-full min-h-[370px] bg-[#FAFAFA] border-[1px] border-[#E0E0E0] rounded-lg flex flex-col justify-between gap-6 p-5">
       <div>
-        <p className="text-[#101828] text-[20px] font-semibold">Persona Details</p>
+        <p className="text-[#101828] text-[20px] font-semibold">Personal details</p>
         <p className="text-[#737373] text-[14px] font-normal">Update your personal information. This information is used to identify you on the platform.</p>
       </div>
 
-      <div className="flex justify-between gap-x-[20px] w-full">
-        <div className="flex flex-col gap-y-[10px] w-[50%]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-[20px] w-full">
+        <div className="flex flex-col gap-y-[10px] min-w-0">
           <p className={`text-[16px] font-medium  ${errorObj.firstName ? "text-[#F04438]" : "text-[#1E1E1E]"}`}>First Name*</p>
           <input
             type="text"
@@ -137,7 +145,7 @@ const PersonalDetails = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-y-[10px] w-[50%]">
+        <div className="flex flex-col gap-y-[10px] min-w-0">
           <p className={`text-[16px] font-medium  ${errorObj.lastName ? "text-[#F04438]" : "text-[#1E1E1E]"}`}>Last Name*</p>
           <input
             type="text"
@@ -150,8 +158,8 @@ const PersonalDetails = () => {
         </div>
       </div>
 
-      <div className="flex justify-between gap-x-[20px] w-full">
-        <div className="flex flex-col gap-y-[10px] w-[50%]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-[20px] w-full">
+        <div className="flex flex-col gap-y-[10px] min-w-0">
           <p className={`text-[16px] font-medium text-[#1E1E1E]`}>Email*</p>
           <input
             type="text"
@@ -163,7 +171,7 @@ const PersonalDetails = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-y-[10px] w-[50%]">
+        <div className="flex flex-col gap-y-[10px] min-w-0">
           <p className={`text-[16px] font-medium  ${errorObj.phone ? "text-[#F04438]" : "text-[#1E1E1E]"}`}>Contact Number*</p>
           <input
             type="number"
@@ -177,10 +185,10 @@ const PersonalDetails = () => {
         </div>
       </div>
 
-      <div className="flex gap-x-[20px] mt-[20px] w-full flex justify-end">
-        <button type="button" onClick={handleCancel} className="rounded-lg w-[150px] h-[40px] border-[1px] border-[#DDDDDD] text-[14px] text-[#1E1E1E] semi-bold cursor-pointer">Cancel</button>
+      <div className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-x-[20px] mt-[20px] w-full sm:justify-end">
+        <button type="button" onClick={handleCancel} className="rounded-lg w-full sm:w-[150px] h-[44px] sm:h-[40px] border-[1px] border-[#DDDDDD] text-[14px] text-[#1E1E1E] semi-bold cursor-pointer">Cancel</button>
 
-        <button type="button" onClick={handleSubmit} className="rounded-lg w-[150px] h-[40px] bg-[#004085] text-[14px] text-[white] semi-bold cursor-pointer">
+        <button type="button" onClick={handleSubmit} className="rounded-lg w-full sm:w-[150px] h-[44px] sm:h-[40px] bg-[#004085] text-[14px] text-[white] semi-bold cursor-pointer">
           {isLoading ? <BeatLoader /> : "Save Changes"}
         </button>
 

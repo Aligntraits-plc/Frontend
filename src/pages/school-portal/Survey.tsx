@@ -2,7 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { FiArrowLeft, FiCheck } from "react-icons/fi";
 import api from "../../api/axios";
-import { questions } from "../../data/questions";
+import { questions, questionText } from "../../data/questions";
 import { CLASS_LEVELS, errorCode, errorMessage, portalAssisted } from "../../services/roles";
 import { Btn, Card, CardTitle, ErrorNote, Field, inputClass } from "../../components/Admin/kit";
 
@@ -103,9 +103,9 @@ export default function Survey() {
         </div>
         <div className="rounded-2xl border border-[#E4E9F0] bg-white p-5 sm:p-8">
           <h1 className="text-[22px] font-bold leading-snug text-[#002650] sm:text-[26px]" style={{ fontFamily: "'AT Fira Sans', 'Fira Sans', sans-serif" }}>
-            {q.question}
+            {questionText(q)}
           </h1>
-          <div className="mt-6 grid gap-3" role="radiogroup" aria-label={q.question}>
+          <div className="mt-6 grid gap-3" role="radiogroup" aria-label={questionText(q)}>
             {q.options.map((o) => {
               const picked = answers[q.id] === o.value;
               return (

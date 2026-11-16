@@ -244,9 +244,9 @@ export default function Index() {
   }
   
   return (
-    <div className="flex h-screen flex-col gap-y-[20px] p-5">
+    <div className="flex min-h-full flex-col gap-y-[20px] p-4 sm:p-5">
       
-      <div className="h-[170px] w-full flex justify-between border-b border-[#EAECF0] py-[20px]">
+      <div className="w-full grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 border-b border-[#EAECF0] pb-[20px]">
         <DashboardCard 
           percentType={true} 
           bgColor="#E8FBF5" 
@@ -282,9 +282,9 @@ export default function Index() {
         />
       </div>
 
-      <div className="flex justify-between items-center">
-        <div className="flex gap-x-[10px] my-[20px]">
-          <div className="w-[200px] relative" ref={dropdownRef}>
+      <div className="flex flex-col gap-3 lg:flex-row lg:justify-between lg:items-center">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-[10px] lg:my-[20px] w-full lg:w-auto">
+          <div className="w-full lg:w-[200px] relative" ref={dropdownRef}>
             <FiSearch className="absolute top-[25%] right-[10px] text-[#999999]" />
             <input
               type="text"
@@ -314,7 +314,7 @@ export default function Index() {
               )}
           </div>
 
-          <div className="w-[200px] relative" ref={stateDropdownRef}>
+          <div className="w-full lg:w-[200px] relative" ref={stateDropdownRef}>
             <FiSearch className="absolute top-[25%] right-[10px] text-[#999999]" />
             <input
               type="text"
@@ -345,7 +345,7 @@ export default function Index() {
             )}
           </div>
 
-          <div className="w-[200px] relative">
+          <div className="w-full lg:w-[200px] relative">
             <select
               className="h-[40px] border-[0.8px] border-gray-300 p-2 w-full rounded-md focus:outline-none text-[#999999] text-[14px] font-medium appearance-none"
               value={selectedSchool}
@@ -370,7 +370,7 @@ export default function Index() {
         <button 
           onClick={resetFilter}
           type="button" 
-          className="w-[150px] text-white py-2 h-[40px] bg-[#004085] p-2 rounded-md 
+          className="w-full sm:w-[150px] shrink-0 text-white py-2 h-[40px] bg-[#004085] p-2 rounded-md 
              outline-0 focus:outline-none flex justify-center items-center gap-x-[10px]"
           >
           <MdFilterList className="w-6 h-6"  />
@@ -378,19 +378,19 @@ export default function Index() {
         </button>
       </div>
 
-      <div className="flex gap-x-[20px]">
-        <div className="flex flex-col gap-y-[10px] w-[50%]">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-[20px]">
+        <div className="flex flex-col gap-y-[10px] min-w-0">
           <p className="text-[#000000] text-[16px] font-bold">Top Loan Application Schools</p>
           <div className="w-[100%] rounded-lg border-[0.8px] 
-            border-gray-300 h-[300px] flex justify-center items-center">
+            border-gray-300 h-[200px] md:h-[300px] px-4 text-center flex justify-center items-center">
             <p className="text-[#737373] text-[14px] font-semibold">There was no data found for this data range</p>
           </div>
         </div>
 
-        <div className="flex flex-col gap-y-[10px] w-[50%]">
+        <div className="flex flex-col gap-y-[10px] min-w-0">
           <p className="text-[#000000] text-[16px] font-bold">Loan Application by Region</p>
           <div className="w-[100%] rounded-lg border-[0.8px] 
-            border-gray-300 h-[300px] flex justify-center items-center">
+            border-gray-300 h-[200px] md:h-[300px] px-4 text-center flex justify-center items-center">
             <p className="text-[#737373] text-[14px] font-semibold">There was no data found for this data range</p>
           </div>
         </div>

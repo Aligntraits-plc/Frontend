@@ -54,11 +54,18 @@ export default function AcceptInvite() {
     }
   };
 
+  // Once the account is set up, move on to the sign in page without another tap.
+  useEffect(() => {
+    if (!done) return;
+    const t = setTimeout(() => navigate(done.login), 3500);
+    return () => clearTimeout(t);
+  }, [done, navigate]);
+
   const heading =
     info?.role === "AMBASSADOR"
       ? "Become an AlignTraits ambassador"
       : info?.role === "COUNSELLOR"
-        ? `Join the school portal${info.schoolName ? ` for ${info.schoolName}` : ""}`
+        ? `Set up your counsellor account${info.schoolName ? ` for ${info.schoolName}` : ""}`
         : `Join the AlignTraits team${info ? ` as ${info.roleLabel.toLowerCase()}` : ""}`;
 
   return (
@@ -83,8 +90,9 @@ export default function AcceptInvite() {
               </span>
               <h1 className="mt-4 text-[20px] font-bold text-[#101828]">You're all set</h1>
               <p className="mt-2 text-[15px] leading-[24px] text-[#475467]">{done.message}</p>
+              <p className="mt-2 text-[14px] text-[#667085]">Taking you to the sign in page.</p>
               <div className="mt-6">
-                <Btn onClick={() => navigate(done.login)}>Sign in</Btn>
+                <Btn onClick={() => navigate(done.login)}>Sign in now</Btn>
               </div>
             </div>
           ) : (
@@ -143,7 +151,7 @@ export default function AcceptInvite() {
               )}
               <ErrorNote>{error}</ErrorNote>
               <Btn type="submit" busy={busy}>
-                {info.needsPassword ? "Create my account" : "Accept invitation"}
+                {info.needsPassword ? (info.role === "COUNSELLOR" ? "Set up my account" : "Create my account") : "Accept invitation"}
               </Btn>
             </form>
           )}

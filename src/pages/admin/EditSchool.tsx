@@ -11,6 +11,7 @@ import DeleteSchoolModal from "../../components/Admin/DeleteSchoolModal";
 import { Course } from "../../types/course.types";
 import EditSchoolModal from "../../components/Admin/EditSchoolModal";
 import { useAuth } from "../../contexts/useAuth";
+import schoolPlaceholder from "../../assets/school-placeholder.svg";
 
 interface SchoolWithCourses extends School {
   courses: Course[];
@@ -80,26 +81,26 @@ export default function EditSchool() {
           <ClipLoader />
         </div>
       ) : (
-        <div className="grid gap-10 z-10 p-5 xl:p-6">
-          <div className="flex gap-10">
-            <div className="rounded-full w-60 h-60">
+        <div className="grid grid-cols-1 gap-6 md:gap-10 z-10 p-4 sm:p-5 xl:p-6 min-w-0">
+          <div className="flex flex-col sm:flex-row gap-5 sm:gap-10 min-w-0">
+            <div className="rounded-full w-24 h-24 sm:w-40 sm:h-40 lg:w-60 lg:h-60 shrink-0 bg-[#F2F4F7] overflow-hidden">
               <img
-                src={school?.logo}
-                alt={`AlignTrait School ${school?.name} Logo`}
-                className="w-full h-full rounded-full"
+                src={school?.logo || schoolPlaceholder}
+                alt=""
+                onError={(e) => { if (!e.currentTarget.src.endsWith(schoolPlaceholder)) e.currentTarget.src = schoolPlaceholder; }}
+                className="w-full h-full rounded-full object-cover"
               />
             </div>
-            <div className="[&>p]:text-[#787878] [&>p]:text-[16px] space-y-2 my-auto">
+            <div className="[&>p]:text-[#787878] [&>p]:text-[16px] space-y-2 sm:my-auto min-w-0">
               <h2 className="text-[#000000] font-bold text-[24px] capitalize">
                 {school?.name}
               </h2>
               <p className="capitalize">
                 {school?.schoolType.split("_").join(" ").toLowerCase()}
               </p>
-              <p>{school?.location}</p>
+              <p>{[school?.region, school?.country].filter(Boolean).join(", ") || school?.location}</p>
               <p>{`${school?.courses.length} courses`}</p>
-              <p>{"17,000 accounts applied"}</p>
-              <div className="w-[80%]">
+              <div className="w-full max-w-[240px]">
                 <CreateSchoolDropDown
                   label="Edit School"
                   Icon={FiEdit}
@@ -114,8 +115,8 @@ export default function EditSchool() {
               </div>
             </div>
           </div>
-          <div>
-            <ul className="flex gap-5 text-[#787878] text-[16px] font-medium w-full border-b-[1px] border-[#75757599] pt-5">
+          <div className="min-w-0">
+            <ul className="flex flex-wrap gap-x-5 text-[#787878] text-[16px] font-medium w-full border-b-[1px] border-[#75757599] pt-2 sm:pt-5">
               <li
                 className={`my-auto h-full pb-5 cursor-pointer ${
                   activeTab === "All Courses"
@@ -136,7 +137,7 @@ export default function EditSchool() {
               >
                 Scholarships
               </li>
-              <li>
+              <li className="w-full sm:w-auto sm:ml-auto">
                 <CourseSearch
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
@@ -146,7 +147,7 @@ export default function EditSchool() {
             {isLoading ? (
               <Skeleton count={3} height={100} />
             ) : (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 py-10">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 py-6 sm:py-10">
                 {filteredCourses?.map((course, index) => (
                   <EditCourseCard
                     course={course}
@@ -183,8 +184,8 @@ export default function EditSchool() {
                 websiteUrl={school?.websiteUrl as string}
                 selectedProps={
                   {
-                    value: school?.location as string,
-                    label: school?.location as string
+                    value: `${school?.country || ""}/${school?.region || ""}`,
+                    label: `${school?.country || ""}/${school?.region || ""}`
                   }
                 }
                 fetchSchool={fetchSchool}

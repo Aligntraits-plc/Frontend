@@ -49,9 +49,9 @@ export default function SchoolDetails({
   return (
     <div className="absolute inset-0 bg-white p-10 z-10">
       <div className="relative">
-        <div className="flex gap-x-[10px] items-center">
+        <div className="flex flex-wrap gap-[10px] items-center">
 
-          <button  onClick={()=> setShowModal(false)} className="w-[120px] flex gap-x-[5px] justify-center items-center py-2 rounded-lg border-[1px] border-[#DDDDDD]">
+          <button  onClick={()=> setShowModal(false)} className="w-[120px] shrink-0 flex gap-x-[5px] justify-center items-center py-2 rounded-lg border-[1px] border-[#DDDDDD]">
             <MdKeyboardBackspace /> <p className="font-semibold text-[14px] text-[#1E1E1E]">Go Back</p>
           </button>
 
@@ -60,7 +60,7 @@ export default function SchoolDetails({
           </h2>
         </div>
 
-        <div className="bg-[#FAFAFA] w-[100%] h-[350px] rounded-md border-[1px] border-[#E0E0E0] mt-[20px] flex justify-between p-5">
+        <div className="bg-[#FAFAFA] w-[100%] min-h-[350px] rounded-md border-[1px] border-[#E0E0E0] mt-[20px] flex flex-col-reverse gap-5 lg:flex-row lg:justify-between p-4 sm:p-5">
 
           <div className="flex flex-col gap-y-[10px]">
             <p className="text-[20px] text-[#101828] font-semibold">School Details</p>
@@ -81,22 +81,22 @@ export default function SchoolDetails({
 
               <div className="flex flex-col gap-y-[5px]">
                 <div>
-                  <p className="text-[#737373] font-normal text[12px]">Location</p>
+                  <p className="text-[#737373] font-normal text-[12px]">Location</p>
                   <p className="text-[#1E1E1E] text-[16px] font-medium">{country}</p>
                 </div>
 
                 <div>
-                  <p className="text-[#737373] font-normal text[12px]">School Type</p>
+                  <p className="text-[#737373] font-normal text-[12px]">School Type</p>
                   <p className="text-[#1E1E1E] text-[16px] font-medium">{splitString(schooTypeDefault)}</p>
                 </div>
 
                 <div>
-                  <p className="text-[#737373] font-normal text[12px]">Region</p>
+                  <p className="text-[#737373] font-normal text-[12px]">Region</p>
                   <p className="text-[#1E1E1E] text-[16px] font-medium">{region}</p>
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <p className="text-[#737373] font-normal text[12px]">
+                  <p className="text-[#737373] font-normal text-[12px]">
                     Website
                   </p>
                   <p className="text-[#1E1E1E] text-[16px] font-medium truncate">
@@ -115,7 +115,7 @@ export default function SchoolDetails({
             </div>
           </div>
 
-          <div className="flex gap-x-[10px]">
+          <div className="flex flex-wrap gap-[10px]">
             <button  onClick={()=> setEditModal(true)} className="w-[76px] h-[44px] flex gap-x-[5px] justify-center items-center bg-[white] py-2 rounded-lg border-[1px] border-[#DDDDDD]">
               <FaRegEdit /> <p className="font-medium text-[14px] text-[#1E1E1E]">Edit</p>
             </button>

@@ -14,9 +14,9 @@ const DownloadData = () => {
 
   return (
     <>
-      <div className="p-[20px] flex gap-x-[20px]">
-        <div className="w-[450px] h-[340px] border-[1px] border-[#DDDDDD] rounded-md p-[20px]
-        flex flex-col justify-between">
+      <div className="p-4 sm:p-[20px] grid grid-cols-1 lg:grid-cols-2 gap-[20px] max-w-[940px]">
+        <div className="w-full min-h-[340px] border-[1px] border-[#DDDDDD] rounded-md p-[20px]
+        flex flex-col justify-between gap-4">
           <div className="flex flex-col gap-y-[2px]">
             <p className="text-[#101828] text-[16px] font-semibold">School Data</p>
             <p className="text-[14px] font-normal text-[#737373]">Download information about schools, including metrics and enrollment data.</p>
@@ -34,17 +34,17 @@ const DownloadData = () => {
             <li className="text-[14px] font-normal text-[#737373]">Account status and historical data</li>
           </ul>
 
-          <button onClick={() => handleOpenModal("School")} className="bg-[#004085] w-[400px] h-[52px] rounded-md flex justify-center gap-x-[10px] items-center">
+          <button onClick={() => handleOpenModal("School")} className="bg-[#004085] w-full h-[52px] rounded-md flex justify-center gap-x-[10px] items-center">
             <HiOutlineDownload className="text-[#FFFFFF]" />
             <p className="text-[14px] font-semibold text-[#FFFFFF]">Download School Data</p>
           </button>
         </div>
 
-        <div className="w-[450px] h-[340px] border-[1px] border-[#DDDDDD] rounded-md p-[20px]
-        flex flex-col justify-between">
+        <div className="w-full min-h-[340px] border-[1px] border-[#DDDDDD] rounded-md p-[20px]
+        flex flex-col justify-between gap-4">
           <div className="flex flex-col gap-y-[2px]">
             <p className="text-[#101828] text-[16px] font-semibold">Course Data</p>
-            <p className="text-[14px] font-normal text-[#737373]">Download informtion about courses, enrollments, and performance metrics.
+            <p className="text-[14px] font-normal text-[#737373]">Download information about courses, enrollments, and performance metrics.
             </p>
           </div>
 
@@ -60,7 +60,7 @@ const DownloadData = () => {
             <li className="text-[14px] font-normal text-[#737373]">Historical data and trend analysis</li>
           </ul>
 
-          <button onClick={() => handleOpenModal("Course")} className="bg-[#004085] w-[400px] h-[52px] rounded-md flex justify-center gap-x-[10px] items-center">
+          <button onClick={() => handleOpenModal("Course")} className="bg-[#004085] w-full h-[52px] rounded-md flex justify-center gap-x-[10px] items-center">
             <HiOutlineDownload className="text-[#FFFFFF]" />
             <p className="text-[14px] font-semibold text-[#FFFFFF]">Download Course Data</p>
           </button>

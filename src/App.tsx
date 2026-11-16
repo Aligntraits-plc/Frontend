@@ -61,7 +61,8 @@ const PortalChannel = lazy(() => import("./pages/school-portal/SchoolChannel"));
 const PortalEvents = lazy(() => import("./pages/school-portal/PortalEvents"));
 const PortalAccount = lazy(() => import("./pages/school-portal/PortalAccount"));
 const PrintReport = lazy(() => import("./pages/school-portal/PrintReport"));
-const Workshop = lazy(() => import("./pages/dashboard/Workshop"));
+const WorkshopsList = lazy(() => import("./pages/dashboard/workshops/WorkshopsList"));
+const WorkshopCoursePage = lazy(() => import("./pages/dashboard/workshops/WorkshopCoursePage"));
 const AmbassadorPage2 = lazy(() => import("./pages/dashboard/Ambassador"));
 const MySchool = lazy(() => import("./pages/dashboard/MySchool"));
 const Classmates = lazy(() => import("./components/community/Classmates"));
@@ -78,6 +79,8 @@ const SchoolPage = lazy(() => import("./pages/dashboard/SchoolPage"));
 const SettingsHub = lazy(() => import("./pages/dashboard/settings/SettingsHub"));
 const ProfileSettings = lazy(() => import("./pages/dashboard/settings/ProfileSettings"));
 const AcademicSettings = lazy(() => import("./pages/dashboard/settings/AcademicSettings"));
+const FinancingSettings = lazy(() => import("./pages/dashboard/settings/FinancingSettings"));
+const AdminScholarships = lazy(() => import("./pages/admin/Scholarships"));
 const SecuritySettings = lazy(() => import("./pages/dashboard/settings/SettingsFrames").then((m) => ({ default: m.SecuritySettings })));
 const BillingSettings = lazy(() => import("./pages/dashboard/settings/SettingsFrames").then((m) => ({ default: m.BillingSettings })));
 const PaymentCallback = lazy(() => import("./pages/PaymentCallback"));
@@ -200,7 +203,8 @@ const router = createBrowserRouter([
       { path: "progres-tracker", element: <Navigate to="/dashboard" replace /> },
       { path: "school", element: <SchoolPage /> },
       { path: "skill-roadmap", element: <Navigate to="/dashboard/workshop" replace /> },
-      { path: "workshop", element: <Workshop /> },
+      { path: "workshop", element: <WorkshopsList /> },
+      { path: "workshop/:slug", element: <WorkshopCoursePage /> },
       { path: "ambassador", element: <AmbassadorPage2 /> },
 
       {
@@ -209,7 +213,8 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <SettingsHub /> }, // /dashboard/settings
           { path: "profile", element: <ProfileSettings /> }, // /dashboard/settings/profile
-          { path: "records", element: <AcademicSettings /> }, // /dashboard/settings/records
+          { path: "records", element: <AcademicSettings /> },
+          { path: "financing", element: <FinancingSettings /> }, // /dashboard/settings/records
           { path: "security", element: <SecuritySettings /> }, // /dashboard/settings/security
           { path: "subscription", element: <BillingSettings /> },
           { path: "school", element: <MySchool /> },
@@ -239,6 +244,7 @@ const router = createBrowserRouter([
           { path: "waitlist", element: <RequireRole roles={ADMINS}><Waitlist /></RequireRole> },
           { path: "school-codes", element: <RequireRole roles={ADMINS}><SchoolCodes /></RequireRole> },
           { path: "community", element: <RequireRole roles={CONTENT_TEAM}><CommunityAdmin /></RequireRole> },
+          { path: "scholarships", element: <RequireRole roles={CONTENT_TEAM}><AdminScholarships /></RequireRole> },
           { path: "users", element: <RequireRole roles={ADMINS}><UsersList /></RequireRole> },
           { path: "schools", element: <RequireRole roles={CONTENT_TEAM}><Schools /></RequireRole> },
           { path: "schools/:schoolId/courses", element: <RequireRole roles={CONTENT_TEAM}><SchoolCourses /></RequireRole> },

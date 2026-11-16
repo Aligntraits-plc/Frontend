@@ -164,14 +164,14 @@ export default function BulkCenter () {
 
   return (
     <div className="relative">
-      <div className="flex flex-col w-full gap-10 p-5 xl:p-6">
+      <div className="flex flex-col w-full gap-6 p-4 sm:p-5 xl:p-6">
         <div className="flex flex-col gap-y-[5px]">
           <p className="text-[#101828] text-[24px] font-semibold">Bulk Center</p>
           <p className="text-[#737373] text-[16px] font-normal">Monitor and manage all your bulk uploads and operations.</p>
         </div>
 
-        <div className="flex justify-between">
-          <div className="relative w-[450px]">
+        <div className="flex flex-col gap-3 lg:flex-row lg:justify-between">
+          <div className="relative w-full lg:w-[450px]">
             <input
               type="text"
               placeholder="Search by file name..."
@@ -182,11 +182,11 @@ export default function BulkCenter () {
             <FiSearch className="absolute left-2 top-1/2 -translate-y-1/2 text-[#999999] w-5 h-5" />
           </div>
 
-          <div className="flex gap-x-[20px]">
+          <div className="grid grid-cols-2 gap-3 sm:flex sm:gap-x-[20px]">
             <button 
               onClick={resetFilter}
               type="button" 
-              className="w-[130px] text-[#737373] text-[14px] font-medium py-2 h-[40px] p-2 rounded-md 
+              className="w-full sm:w-[130px] text-[#737373] text-[14px] font-medium py-2 h-[40px] p-2 rounded-md 
                   rounded-md font-semibold border-[1px] border-[#DDDDDD] flex justify-between items-center gap-x-[10px]"
             >
               <CiFilter className="text-[#1E1E1E] w-5 h-5" />
@@ -197,7 +197,7 @@ export default function BulkCenter () {
             <button 
               onClick={generateCSV}
               type="button" 
-              className="w-[130px] text-[#737373] text-[14px] font-medium py-2 h-[40px] p-2 rounded-md font-semibold border-[1px] border-[#DDDDDD] flex justify-between items-center gap-x-[10px]"
+              className="w-full sm:w-[130px] text-[#737373] text-[14px] font-medium py-2 h-[40px] p-2 rounded-md font-semibold border-[1px] border-[#DDDDDD] flex justify-between items-center gap-x-[10px]"
             >
               <AiOutlineDownload className="text-[#1E1E1E] w-5 h-5" />
               <p>Export Logs</p>
@@ -205,8 +205,8 @@ export default function BulkCenter () {
           </div>
         </div>
 
-        <div className="flex gap-x-[20px]">
-          <div className="w-[150px]">
+        <div className="grid grid-cols-2 gap-3 md:flex md:gap-x-[20px]">
+          <div className="w-full md:w-[150px]">
             <CustomSelectWithProps 
               placeholder="All Statuses"
               options={STATUS.map((level) => ({
@@ -221,7 +221,7 @@ export default function BulkCenter () {
             />
           </div>
 
-          <div className="w-[150px]">
+          <div className="w-full md:w-[150px]">
             <CustomSelectWithProps 
               placeholder="All Actions"
               options={ACTIONS.map((level) => ({
@@ -236,7 +236,7 @@ export default function BulkCenter () {
             />
           </div>
 
-          <div className="w-[150px]">
+          <div className="w-full md:w-[150px]">
             <CustomSelectWithProps 
               placeholder="All Entities"
               options={ENTITIES.map((level) => ({
@@ -251,7 +251,7 @@ export default function BulkCenter () {
             />
           </div>
 
-          <div className="relative w-[150px] h-[40px] flex gap-x-[10px] items-center border rounded-md  py-2 bg-white cursor-pointer">
+          <div className="relative w-full md:w-[150px] h-[40px] flex gap-x-[10px] items-center border rounded-md  py-2 bg-white cursor-pointer">
             {/* <FiCalendar className="w-6 h-6 text-[#595959]"  />
             <DatePicker
               selected={startDate}

@@ -115,7 +115,7 @@ export default function CommunityAdmin() {
             role="tab"
             aria-selected={tab === t.id}
             onClick={() => setTab(t.id)}
-            className={`flex h-10 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 text-[14px] font-semibold ${
+            className={`flex h-10 flex-1 items-center justify-center gap-1.5 sm:gap-2 whitespace-nowrap rounded-lg px-2 sm:px-4 text-[13px] sm:text-[14px] font-semibold ${
               tab === t.id ? "bg-white text-[#004085] shadow-sm" : "text-[#475467] hover:text-[#101828]"
             }`}
           >

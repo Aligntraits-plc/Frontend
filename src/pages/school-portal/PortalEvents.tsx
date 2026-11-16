@@ -47,7 +47,7 @@ export default function PortalEvents() {
                 href={googleCalendarUrl(e)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="self-center rounded-lg border border-[#D0D5DD] p-2 text-[#344054] hover:bg-[#F9FAFB]"
+                className="flex h-11 w-11 shrink-0 items-center justify-center self-center rounded-lg border border-[#D0D5DD] text-[#344054] hover:bg-[#F9FAFB]"
                 aria-label={`Add ${e.title} to Google Calendar`}
               >
                 <CalendarPlus size={18} aria-hidden="true" />

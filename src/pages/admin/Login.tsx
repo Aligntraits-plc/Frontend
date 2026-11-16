@@ -194,7 +194,7 @@ const { token, setToken: setSessionToken } = useAuth()
           </div>
         </div>
       </div>
-      <div className="hidden md:flex w-full basis-[50%] bg-[#E6ECF3] flex-col pl-[20px]">
+      <div className="hidden md:flex w-full basis-[50%] bg-[#E6ECF3] flex-col pl-[20px] relative overflow-hidden">
         {/* <img src={AdminAuth} alt="" className="h-screen w-full" /> */}
         <p className="text-[#00162F] font-medium text-[16px] font-medium p-[30px]">
           AlignTraits has revolutionized the way learning and development are structured. 
@@ -212,8 +212,8 @@ const { token, setToken: setSessionToken } = useAuth()
           </div>
         </div>
 
-        <div className="mt-20 absolute right-[0px] bottom-[0px] rounded-tl-lg border-l-[4px] border-t-[4px] border-[#101828]">
-          <img src={LogoTwo} alt="" className="w-[620px] h-[450px] rounded-tl-lg " />
+        <div className="mt-20 absolute right-[0px] bottom-[0px] w-[88%] max-w-[620px] rounded-tl-lg border-l-[4px] border-t-[4px] border-[#101828] pointer-events-none">
+          <img src={LogoTwo} alt="" className="w-full h-auto max-h-[450px] object-cover object-left-top rounded-tl-lg " />
         </div>
       </div>
     </div>

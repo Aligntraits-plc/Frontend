@@ -74,7 +74,7 @@ export default function BulkCenterTable({ isLoading, bulkHistory }: Props) {
 
       {!isLoading && (
         <div className="w-full min-h-[500px] border-b border-gray-300">
-          <table className="w-full table-auto space-y-4">
+          <table className="at-rtable w-full table-auto space-y-4">
             <thead className="border-b-[0.8px] border-[#EAECF0] p-[20px]">
               <tr>
                 <th className="w-[12.5%] p-[10px]">
@@ -130,28 +130,28 @@ export default function BulkCenterTable({ isLoading, bulkHistory }: Props) {
                     className="hover:bg-[#007BFF33] border-b border-gray-300 last:border-b-0"
                     key={index}
                   >
-                    <td className="p-[10px] text-[14px]">
+                    <td data-label="File Name" data-primary="" className="p-[10px] text-[14px]">
                       <p>{item.metadata?.fileName}</p>
                     </td>
-                    <td className="p-[10px] text-[14px]">
+                    <td data-label="Update Date" className="p-[10px] text-[14px]">
                       <p>{formatDateTime(item.timestamp)}</p>
                     </td>
-                    <td className="p-[10px] text-[14px]">
+                    <td data-label="Action" className="p-[10px] text-[14px]">
                       <p>{item.action}</p>
                     </td>
-                    <td className="p-[10px] text-[14px]">
+                    <td data-label="Entity" className="p-[10px] text-[14px]">
                       <p>{item.entity}</p>
                     </td>
-                    <td className="p-[10px] text-[14px]">
+                    <td data-label="Status" className="p-[10px] text-[14px]">
                       {item.metadata?.failedMessages?.length > 0
                         ? renderStatus("Failed")
                         : renderStatus("Completed")}
                     </td>
-                    <td className="mt-3 p-[10px] text-[14px]">
+                    <td data-label="Records" className="mt-3 p-[10px] text-[14px]">
                       {renderSuccessRecords(item.metadata?.successCount)}
                       {renderFailedRecords(item.metadata?.failedCount)}
                     </td>
-                    <td className="p-[10px] text-[14px] capitalize">
+                    <td data-label="Uploaded By" className="p-[10px] text-[14px] capitalize">
                       {/* <p>{item.user.username || item.user.firstname || item.user.lastname }</p> */}
                       <p>
                         {item.user?.username ||
@@ -160,7 +160,7 @@ export default function BulkCenterTable({ isLoading, bulkHistory }: Props) {
                           "Unknown user"}
                       </p>
                     </td>
-                    <td
+                    <td data-label="Actions" data-actions=""
                       className="p-[10px] text-[14px] cursor-pointer"
                       onClick={() => {
                         setPreviewDetails(item);

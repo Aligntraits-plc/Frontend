@@ -8,14 +8,14 @@ export default function DataManagement () {
 
   return (
     <div className="relative">
-      <div className="flex flex-col w-full gap-10 p-5 xl:p-6">
+      <div className="flex flex-col w-full gap-6 p-4 sm:p-5 xl:p-6">
         <div className="flex flex-col gap-y-[5px]">
           <p className="text-[#101828] text-[24px] font-semibold">Data Management</p>
           <p className="font-normal text-[16px] text-[#737373]">Download and manage your school and course data for analysis and reporting.</p>
         </div>
       </div>
 
-      <div className="flex border-b border-gray-300 m-[15px] mx-[20px]">
+      <div className="flex border-b border-gray-300 my-[15px] mx-4 sm:mx-[20px] overflow-x-auto">
         {["Download Data", "History",].map((tab, index) => {
           const tabKey = `tab${index + 1}`;
           return (

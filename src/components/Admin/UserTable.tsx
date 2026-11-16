@@ -48,8 +48,8 @@ export default function UserTable({
       )}
 
       {!isLoading && (
-        <div className="w-full h-[400px] overflow-y-scroll">
-          <table className="w-full table-auto space-y-4">
+        <div className="at-rtable-wrap w-full h-[400px] overflow-y-scroll">
+          <table className="at-rtable w-full table-auto space-y-4">
             <thead className="border-b-[0.8px] border-[#EAECF0] p-[20px] bg-white sticky top-0">
               <tr className="[&>th]:text-[#000000] [&>th]:text-[14px] [&>th]:font-medium [&>th]:pb-2">
                 <th className="w-[25%] p-[20px]">
@@ -88,7 +88,7 @@ export default function UserTable({
                     key={index + user.id}
                     onClick={() => handleTestClick(user.id)}
                   >
-                    <td className="text-[#000000] text-[16px] font-[400] p-[20px] flex gap-2 items-center">
+                    <td data-label="Firstname" data-primary="" className="text-[#000000] text-[16px] font-[400] p-[20px] flex gap-2 items-center">
                       {/* <div onClick={(e) => handleSelect(e, user.id)} className="cursor-pointer border-[#D0D5DD] border-[1px] h-[25px] w-[25px] rounded-md flex justify-center items-center">
                         {
                           selecteduserList.includes(user.id) && 
@@ -97,16 +97,16 @@ export default function UserTable({
                       </div> */}
                       <p>{user.firstname}</p>
                     </td>
-                    <td className="text-[#757575] text-[14px] font-[500] p-[20px]">
+                    <td data-label="Lastname" className="text-[#757575] text-[14px] font-[500] p-[20px]">
                       {user.lastname}
                     </td>
-                    <td className="text-[#757575] text-[14px] font-[500] p-[20px]">
+                    <td data-label="Email" className="text-[#757575] text-[14px] font-[500] p-[20px]">
                       {user.email}
                     </td>
-                    <td className="text-[#757575] text-[14px] font-[500] p-[20px]">
+                    <td data-label="Gender" className="text-[#757575] text-[14px] font-[500] p-[20px]">
                       {user.gender ? user.gender : "-"} 
                     </td>
-                    <td className="text-[#757575] text-[14px] font-[500] p-[20px]">
+                    <td data-label="Region" className="text-[#757575] text-[14px] font-[500] p-[20px]">
                       {user.region ? user.region : "-"}
                     </td>
                   </tr>

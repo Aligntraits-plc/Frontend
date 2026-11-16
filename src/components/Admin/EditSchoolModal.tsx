@@ -78,17 +78,17 @@ export default function EditSchoolModal({
     location: null,
   });
 
-  const [selectedCountry, setSelectedCountry] = useState<string>(selectedProps.label.split("/")[0]);
-  const [selectedState, setSelectedState] = useState<string>(selectedProps.label.split("/")[1]);
+  const [selectedCountry, setSelectedCountry] = useState<string>(String(selectedProps?.label || "").split("/")[0] || "");
+  const [selectedState, setSelectedState] = useState<string>(String(selectedProps?.label || "").split("/")[1] || "");
   const [selectedDefaultState, setSelectedDefaultState] = useState({
-    value: selectedProps.label.split("/")[1],
-    label: selectedProps.label.split("/")[1]
+    value: String(selectedProps?.label || "").split("/")[1] || "",
+    label: String(selectedProps?.label || "").split("/")[1] || ""
   })
 
 
   const [selectedDefaultCountry, setSelectedDefaultCountry] = useState({
-    value: selectedProps.label.split("/")[0],
-    label: selectedProps.label.split("/")[0]
+    value: String(selectedProps?.label || "").split("/")[0] || "",
+    label: String(selectedProps?.label || "").split("/")[0] || ""
   })
 
   const [errorObj, setErrorObj] = useState({

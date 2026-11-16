@@ -12,15 +12,16 @@ const KINDS = ["WORKSHOP", "LIVE_SESSION"];
 
 /* Workshop: live sessions and workshops from AlignTraits mentors, with reminders,
    join links and recordings of past sessions. */
-export default function Workshop() {
+/* Live sessions and one-off workshops from Community events. `embedded` places it under the course list. */
+export default function Workshop({ embedded = false }: { embedded?: boolean } = {}) {
   const { setPageDesc } = useAuth();
   const [events, setEvents] = useState<CommunityEvent[] | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
 
   useEffect(() => {
-    setPageDesc({ title: "Workshop", desc: "Live sessions and workshops with AlignTraits mentors" });
-  }, [setPageDesc]);
+    if (!embedded) setPageDesc({ title: "Workshop", desc: "Live sessions and workshops with AlignTraits mentors" });
+  }, [setPageDesc, embedded]);
 
   useEffect(() => {
     getEvents({ from: new Date(Date.now() - 180 * 24 * 3600 * 1000).toISOString() })
@@ -50,10 +51,10 @@ export default function Workshop() {
   };
 
   return (
-    <div className={w.page}>
+    <div className={embedded ? undefined : w.page} style={embedded ? { display: "flex", flexDirection: "column", gap: 24 } : undefined}>
       <div>
-        <h1 className={w.title}>Workshop</h1>
-        <p className={w.lead}>Learn how admission really works: choosing courses, reading cut-off marks, post-UTME, funding and more. Join live, or watch the recording later.</p>
+        {embedded ? <h2 className={w.title} style={{ fontSize: 26 }}>Live sessions</h2> : <h1 className={w.title}>Workshop</h1>}
+        <p className={w.lead}>{embedded ? "One-off sessions with the AlignTraits team. Join live, or watch the recording later." : "Learn how admission really works: choosing courses, reading cut-off marks, post-UTME, funding and more. Join live, or watch the recording later."}</p>
       </div>
 
       {error && <p className={ui.errorBox}>{error}</p>}

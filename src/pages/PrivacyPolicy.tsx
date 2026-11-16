@@ -198,7 +198,7 @@ export default function PrivacyPolicy() {
               </p>
               <div className="space-y-1 text-sm sm:text-base">
                 <p><strong>AlignTraits Privacy Team</strong></p>
-                <p><strong>Email:</strong> <a href="mailto:support@aligntrait.com" className="text-blue-600 hover:text-blue-800 underline">support@aligntrait.com</a></p>
+                <p><strong>Email:</strong> <a href="mailto:aligntraits@gmail.com" className="text-blue-600 hover:text-blue-800 underline">aligntraits@gmail.com</a></p>
               </div>
             </section>
 

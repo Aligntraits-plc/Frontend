@@ -248,3 +248,5 @@ export const questions = [
     ]
   }
 ]
+/** The question as shown on screen. The saved text is unchanged because scoring matches on it. */
+export const questionText = (q: { question: string }) => q.question.replace(/^Motivation & Career Drive\s*/, "");

@@ -63,7 +63,7 @@ export const Btn = ({ children, onClick, type = "button", tone = "primary", busy
       disabled={disabled || busy}
       aria-label={label}
       className={`inline-flex items-center justify-center gap-2 rounded-lg font-semibold transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${
-        small ? "h-9 px-3 text-[13px]" : "h-11 px-4 text-[14px]"
+        small ? "h-11 sm:h-9 px-3 text-[13px]" : "h-11 px-4 text-[14px]"
       } ${tones[tone]}`}
     >
       {busy ? <BeatLoader size={7} color={tone === "primary" ? "#FFFFFF" : "#004085"} /> : children}
@@ -114,7 +114,7 @@ export function Tabs<T extends string>({
   items: { value: T; label: string; count?: number }[];
 }) {
   return (
-    <div className="-mx-1 flex gap-1 overflow-x-auto px-1 pb-1" role="tablist">
+    <div className="flex flex-wrap gap-1.5 pb-1" role="tablist">
       {items.map((t) => (
         <button
           key={t.value}

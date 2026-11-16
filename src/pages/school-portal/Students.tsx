@@ -113,14 +113,14 @@ export default function Students() {
           <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-[#98A2B3]" aria-hidden="true" />
           <input className={`${inputClass} pl-9`} value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search students..." />
         </label>
-        <div className="-mx-1 flex gap-1 overflow-x-auto px-1">
+        <div className="flex flex-wrap gap-1.5">
           {FILTERS.map((f) => (
             <button
               key={f.value}
               type="button"
               onClick={() => setFilter(f.value)}
               aria-pressed={filter === f.value}
-              className={`shrink-0 rounded-full px-3 py-1.5 text-[13px] font-semibold ${
+              className={`shrink-0 rounded-full min-h-[44px] sm:min-h-0 px-4 sm:px-3 py-1.5 text-[13px] font-semibold ${
                 filter === f.value ? "bg-[#004085] text-white" : "border border-[#E4E9F0] bg-white text-[#475467]"
               }`}
             >
@@ -186,7 +186,7 @@ function StudentPanel({ id, onChanged, onRemoved }: { id: string; onChanged: () 
   if (error)
     return (
       <div>
-        <Link to="/school-portal" className="mb-3 inline-flex items-center gap-1 text-[14px] font-semibold text-[#004085] lg:hidden">
+        <Link to="/school-portal" className="mb-1 inline-flex min-h-[44px] items-center gap-1 text-[14px] font-semibold text-[#004085] lg:hidden">
           <FiArrowLeft aria-hidden="true" /> All students
         </Link>
         <p className="rounded-xl bg-[#FEF3F2] p-4 text-[14px] text-[#B42318]">{error}</p>
@@ -249,7 +249,7 @@ function StudentPanel({ id, onChanged, onRemoved }: { id: string; onChanged: () 
   return (
     <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_300px]">
       <div className="flex min-w-0 flex-col gap-5">
-        <Link to="/school-portal" className="inline-flex items-center gap-1 text-[14px] font-semibold text-[#004085] lg:hidden">
+        <Link to="/school-portal" className="inline-flex min-h-[44px] items-center gap-1 self-start text-[14px] font-semibold text-[#004085] lg:hidden">
           <FiArrowLeft aria-hidden="true" /> All students
         </Link>
 
@@ -403,7 +403,7 @@ function StudentPanel({ id, onChanged, onRemoved }: { id: string; onChanged: () 
               <p className="mt-1 text-[14px] text-[#475467]">Confirm this recommendation is ready for the parent report.</p>
               <div className="mt-4 flex flex-col gap-3">
                 {["Options align with the student's profile and goals", "Fees and entry requirements are accurate"].map((label, i) => (
-                  <label key={label} className="flex cursor-pointer items-start gap-3 text-[14px] text-[#344054]">
+                  <label key={label} className="flex min-h-[44px] cursor-pointer items-center gap-3 text-[14px] text-[#344054]">
                     <input
                       type="checkbox"
                       className="mt-0.5 h-5 w-5 shrink-0 accent-[#004085]"

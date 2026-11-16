@@ -61,13 +61,16 @@ export const EditCourseCard: React.FC<EditCourseCardProps> = ({
   };
 
   return (
-    <div className="flex flex-col bg-white border rounded-lg hover:border-[#00408540] transition-shadow p-3">
-      <div className="h-50 basis-[50%]">
-        <img
-          src={course.profile as string}
-          alt={course.title}
-          className="w-full h-full  rounded-lg"
-        />
+    <div className="flex flex-col bg-white border rounded-lg hover:border-[#00408540] transition-shadow p-3 min-w-0">
+      <div className="h-36 rounded-lg bg-[#F2F4F7] overflow-hidden">
+        {course.profile ? (
+          <img
+            src={course.profile as string}
+            alt=""
+            className="w-full h-full object-cover"
+            onError={(e) => { e.currentTarget.style.display = "none"; }}
+          />
+        ) : null}
       </div>
 
       <div className="space-y-4 basis-[50%]">
@@ -77,16 +80,16 @@ export const EditCourseCard: React.FC<EditCourseCardProps> = ({
           </h3>
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <img src={schoolLogo} alt="" className="w-10 h-10 rounded-full" />
-            <p className="text-[13.83px] text-[#101828] font-medium capitalize">
+        <div className="flex items-center justify-between gap-2 min-w-0">
+          <div className="flex items-center space-x-2 min-w-0">
+            {schoolLogo ? <img src={schoolLogo} alt="" className="w-10 h-10 rounded-full object-cover shrink-0" onError={(e) => { e.currentTarget.style.display = "none"; }} /> : null}
+            <p className="text-[13.83px] text-[#101828] font-medium capitalize truncate">
               {schoolName}
             </p>
           </div>
 
-          <span className="text-[13.83px] text-[#101828] font-medium">
-            {course.currency == "NAIRA" ? "₦" : "$"} {course.price}
+          <span className="text-[13.83px] text-[#101828] font-medium whitespace-nowrap">
+            {["NAIRA", "NGN"].includes(String(course.currency || "").toUpperCase()) ? "₦" : "$"}{Number(course.price || 0).toLocaleString()}
           </span>
         </div>
 
@@ -107,7 +110,7 @@ export const EditCourseCard: React.FC<EditCourseCardProps> = ({
         <div className="flex  justify-between gap-2 mt-2 w-full">
           <button
             onClick={() => onEdit?.(course)}
-            className="w-[50%] py-2 px-4 bg-[#004085] text-white rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+            className="flex-1 py-2 px-4 bg-[#004085] text-white rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
           >
             Edit
           </button>

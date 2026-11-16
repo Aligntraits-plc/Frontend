@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ChevronRight, CreditCard, GraduationCap, KeyRound, User } from "lucide-react";
+import { ChevronRight, CreditCard, GraduationCap, KeyRound, User, Wallet } from "lucide-react";
 import { useAuth } from "../../../contexts/useAuth";
 import { getStudentSettings, type StudentSettings } from "../../../services/settings";
 import { Loading, Problem } from "../../../components/profile-settings/parts";
@@ -13,6 +13,7 @@ import s from "../../../components/profile-settings/Settings.module.css";
 const TILES = [
   { to: "profile", icon: User, title: "Profile", desc: "Names, class and contact details" },
   { to: "records", icon: GraduationCap, title: "Academic records", desc: "UTME, O’Level and direct entry" },
+  { to: "financing", icon: Wallet, title: "Financing", desc: "Budget, scholarships and loans" },
   { to: "security", icon: KeyRound, title: "Password and security", desc: "Change your password" },
   { to: "subscription", icon: CreditCard, title: "Plan and billing", desc: "Your plan, payments and school code" },
 ];

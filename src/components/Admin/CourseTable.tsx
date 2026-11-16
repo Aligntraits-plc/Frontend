@@ -108,8 +108,8 @@ export default function CoursesTable({
       )}
 
       {!isLoading && (
-        <div className="w-full h-[400px] overflow-y-scroll">
-          <table className="w-full table-auto space-y-4">
+        <div className="at-rtable-wrap w-full h-[400px] overflow-y-scroll">
+          <table className="at-rtable w-full table-auto space-y-4">
             <thead className="border-b-[0.8px] border-[#EAECF0] p-[20px] bg-white sticky top-0">
               <tr className="[&>th]:text-[#000000] [&>th]:text-[14px] [&>th]:font-medium [&>th]:pb-2">
                 <th className="w-[25%] p-[20px]">
@@ -154,7 +154,7 @@ export default function CoursesTable({
                     key={index + course.id}
                     onClick={() => handleTestClick(course.id)}
                   >
-                    <td className="text-[#000000] text-[16px] font-[400] p-[20px] flex gap-2 items-center">
+                    <td data-label="Title" data-primary="" className="text-[#000000] text-[16px] font-[400] p-[20px] flex gap-2 items-center">
                       <div
                         onClick={(e) => handleSelect(e, course.id)}
                         className="cursor-pointer border-[#D0D5DD] border-[1px] h-[25px] w-[25px] rounded-md flex justify-center items-center"
@@ -165,20 +165,20 @@ export default function CoursesTable({
                       </div>
                       <p>{course.title}</p>
                     </td>
-                    <td className="text-[#757575] text-[14px] font-[500] p-[20px]">
+                    <td data-label="Program Level" className="text-[#757575] text-[14px] font-[500] p-[20px]">
                       {course.programLevel}
                     </td>
-                    <td className="text-[#757575] text-[14px] font-[500] p-[20px]">
+                    <td data-label="Duration" className="text-[#757575] text-[14px] font-[500] p-[20px]">
                       {formatDuration(course.durationPeriod, course.duration)}
                     </td>
-                    <td className="text-[#757575] text-[14px] font-[500] p-[20px]">
+                    <td data-label="Tuition Fee" className="text-[#757575] text-[14px] font-[500] p-[20px]">
                       {/* ✅ FIXED: Properly formatted currency */}
                       {formatCurrency(course.price, course.currency)}
                     </td>
-                    <td className="text-[#757575] text-[14px] font-[500] p-[20px]">
+                    <td data-label="Last Modified" className="text-[#757575] text-[14px] font-[500] p-[20px]">
                       {formatDate(course.updatedAt)}
                     </td>
-                    <td className="p-[20px] flex gap-x-[20px] items-center">
+                    <td data-label="Action" data-actions="" className="p-[20px] flex gap-x-[20px] items-center">
                       <FaRegTrashCan
                         onClick={(e) => handleTrashClick(e, course)}
                         className="text-[#D92D20] h-5 w-5 cursor-pointer"

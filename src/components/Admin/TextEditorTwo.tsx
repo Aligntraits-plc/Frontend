@@ -115,7 +115,7 @@ const TextEditorTwo: React.FC<TextEditorProps> = ({
             key={index}
             type="button"
             title={button.tooltip}
-            className="p-1 text-gray-600 hover:bg-gray-200 rounded"
+            className="p-2 lg:p-1 text-gray-600 hover:bg-gray-200 rounded"
             onClick={button.action}
           >
             {typeof button.icon === 'string' ? button.icon : button.icon}

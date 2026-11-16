@@ -113,7 +113,7 @@ export default function Seats() {
                   </p>
                   {c.students.length > 0 && (
                     <>
-                      <button type="button" className="mt-2 text-[14px] font-semibold text-[#004085]" onClick={() => setOpen(open === c.id ? null : c.id)} aria-expanded={open === c.id}>
+                      <button type="button" className="mt-1 inline-flex min-h-[44px] items-center text-[14px] font-semibold text-[#004085]" onClick={() => setOpen(open === c.id ? null : c.id)} aria-expanded={open === c.id}>
                         {open === c.id ? "Hide students" : `See who used it (${c.students.length})`}
                       </button>
                       {open === c.id && (

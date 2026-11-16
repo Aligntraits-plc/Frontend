@@ -507,7 +507,7 @@ export default function AddCourse () {
 
   return (
     <div className="relative">
-      <div className="flex flex-col w-full gap-5 p-5 xl:p-6">
+      <div className="flex flex-col w-full gap-5 p-4 sm:p-5 xl:p-6 max-w-[1000px]">
 
         <div onClick={() => navigate(-1)} className="flex gap-x-[5px] items-center">
           <IoIosArrowBack className="h-4 w-4" />
@@ -516,7 +516,7 @@ export default function AddCourse () {
 
         {
           currentCourseID &&
-          <div className="flex border-b border-gray-300 ">
+          <div className="flex border-b border-gray-300 overflow-x-auto">
             {["Basic Info", "Admission Logic"].map((tab, index) => {
               const tabKey = `tab${index + 1}`;
               return (
@@ -541,15 +541,15 @@ export default function AddCourse () {
 
         {
           activeTab === "tab1" &&
-          <form className="w-full size-max rounded-lg flex flex-col gap-5">
+          <form className="w-full min-w-0 rounded-lg flex flex-col gap-5">
             <div>
-              <p className="text-[18px] font-semibold text-[#1E1E1E] w-[190px] ">
-                Create Course
+              <p className="text-[18px] font-semibold text-[#1E1E1E]">
+                {currentCourseID ? "Edit course" : "Create course"}
               </p>
-              <p className="text-[#737373] text-[16px] font-normal">Add a new course to University of Lagos with all required details.</p>
+              <p className="text-[#737373] text-[16px] font-normal">{currentCourseID ? "Update this course. Students see these details in their matches." : "Add a new course to this school with all the required details."}</p>
             </div>
 
-            <div className="w-[300px] flex flex-col gap-y-[5px]">
+            <div className="w-full max-w-[300px] flex flex-col gap-y-[5px]">
               <p className="text-[16px] text-[#1E1E1E] font-medium">Course Image*</p>
               <ImageUploadWithPreview
                 setImageFile={setImageFile}
@@ -566,7 +566,7 @@ export default function AddCourse () {
             <div className="w-full flex flex-col gap-y-[5px]">
               <p className={`text-[16px] text-[#1E1E1E] font-medium ${errorObj.title ? "text-[#F04438]" : "text-[#1E1E1E]"}`}>Course Title*</p>
                 <SearchSelect
-                  placeholder="Select Level"
+                  placeholder="Select a course title"
                   options={programList.map((level) => ({
                     value: level,
                     label: level,
@@ -596,8 +596,8 @@ export default function AddCourse () {
               <p className="text-[#737373] text-[12px] font-normal">The official website page for this course.</p>
             </div>
 
-            <div className="flex gap-x-[20px]">
-              <div className="w-full flex flex-col gap-y-[5px]">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-[20px]">
+              <div className="w-full min-w-0 flex flex-col gap-y-[5px]">
                 <p className={`text-[16px] text-[#1E1E1E] font-medium ${errorObj.programLevel ? "text-[#F04438]" : "text-[#1E1E1E]"}`}>Program Level*</p>
                 <CustomSelect
                   placeholder="Select Level"
@@ -651,8 +651,8 @@ export default function AddCourse () {
 
             </div>
 
-            <div className="flex gap-x-[20px]">
-              <div className="w-full flex flex-col gap-y-[5px]">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-[20px]">
+              <div className="w-full min-w-0 flex flex-col gap-y-[5px]">
                 <p className={`text-[16px] text-[#1E1E1E] font-medium ${errorObj.isScholarship ? "text-[#F04438]" : "text-[#1E1E1E]"}`}>Scholarship*</p>
                 <CustomSelect
                   placeholder="Select Level"
@@ -785,7 +785,7 @@ export default function AddCourse () {
 
             </div>
 
-            <div className="w-full flex flex-col gap-y-[5px] size-max relative">
+            <div className="w-full min-w-0 flex flex-col gap-y-[5px] relative">
               <p className={`text-[16px] text-[#1E1E1E] font-medium ${errorObj.courseDescription ? "text-[#F04438]" : "text-[#1E1E1E]"}`}>Course Description*</p>
               <TextEditorTwo 
                 placeholder="Describe the main objectives of this course...."
@@ -796,7 +796,7 @@ export default function AddCourse () {
               <p className="text-[#737373] text-[12px] font-normal">What students will learn and achieve by completing this course.</p>
             </div>
 
-            <div className="w-full flex flex-col gap-y-[5px] size-max relative">
+            <div className="w-full min-w-0 flex flex-col gap-y-[5px] relative">
               <p className={`text-[16px] text-[#1E1E1E] font-medium text-[#1E1E1E]`}>Scholarship Information</p>
               <TextEditorTwo 
                 initialValue={scholarshipDescription} 
@@ -807,7 +807,7 @@ export default function AddCourse () {
               <p className="text-[12px] text-[#737373] font-normal">Details about scholarship</p>
             </div>
 
-            <div className="w-full flex flex-col gap-y-[5px] size-max relative">
+            <div className="w-full min-w-0 flex flex-col gap-y-[5px] relative">
               <p className={`text-[16px] text-[#1E1E1E] font-medium text-[#1E1E1E]`}>Loan Information</p>
               <TextEditorTwo 
                 placeholder="Describe the main objectives of this course...." 
@@ -818,10 +818,10 @@ export default function AddCourse () {
               <p className="text-[12px] text-[#737373] font-normal">Details about loan eligibility, terms, and application process for this course.</p>
             </div>
             
-            <div className="flex gap-x-[20px] mt-[20px] w-full flex justify-end">
-              <button type="button" onClick={handleCancel} className="rounded-lg w-[150px] h-[40px] border-[1px] border-[#DDDDDD] text-[14px] text-[#1E1E1E] semi-bold cursor-pointer">Cancel</button>
+            <div className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-x-[20px] mt-[20px] w-full sm:justify-end">
+              <button type="button" onClick={handleCancel} className="rounded-lg w-full sm:w-[150px] h-[44px] sm:h-[40px] border-[1px] border-[#DDDDDD] text-[14px] text-[#1E1E1E] semi-bold cursor-pointer">Cancel</button>
 
-              <button type="button" onClick={handleSubmit} className="rounded-lg w-[150px] h-[40px] bg-[#004085] text-[14px] text-[white] semi-bold cursor-pointer">
+              <button type="button" onClick={handleSubmit} className="rounded-lg w-full sm:w-[150px] h-[44px] sm:h-[40px] bg-[#004085] text-[14px] text-[white] semi-bold cursor-pointer">
                 {isLoading ? <BeatLoader /> : currentCourseID ? "Update Course" : "Create Course"}
               </button>
 

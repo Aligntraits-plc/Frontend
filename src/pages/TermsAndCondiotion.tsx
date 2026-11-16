@@ -208,7 +208,7 @@ export default function TermsAndCondtion() {
                 For questions or concerns, please contact us at:
               </p>
               <p className="text-sm sm:text-base">
-                <strong>Email:</strong> <a href="mailto:support@aligntrait.com" className="text-blue-600 hover:text-blue-800 underline">support@aligntrait.com</a>
+                <strong>Email:</strong> <a href="mailto:aligntraits@gmail.com" className="text-blue-600 hover:text-blue-800 underline">aligntraits@gmail.com</a>
               </p>
             </section>
 

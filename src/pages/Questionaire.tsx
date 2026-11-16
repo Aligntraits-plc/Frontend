@@ -5,7 +5,7 @@ import Header from "../components/Header";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import resetIcon from "../assets/recommedationIcon.svg"
 import menuIcon from "../assets/androidMenu.svg"
-import { questions } from "../data/questions";
+import { questions, questionText } from "../data/questions";
 import { BeatLoader } from "react-spinners";
 import {toast} from 'react-toastify'
 import { sendCareerPath } from "../services/utils";
@@ -31,8 +31,6 @@ export default function Questionaire() {
 
   const foundUser = localStorage.getItem("userData");
   const data = foundUser ? JSON.parse(foundUser) : {ok: false};
-
-  console.log("token: ", token)
 
 
   function handleSelectAnswer(questionId: string, value: string) {
@@ -115,7 +113,6 @@ export default function Questionaire() {
     
 
     if (data.ok) {
-      console.log("token: ", token)
       if (token) {
         navigate("/dashboard")
       } else {
@@ -180,7 +177,7 @@ export default function Questionaire() {
                     Question {currentIndex + 1}/{questions.length}:
                   </p>
                   <div className="w-full sm:w-[600px] h-auto min-h-[180px] space-y-4 flex flex-col p-4 sm:p-6 bg-white rounded-lg shadow-lg border-0 sm:border border-[#ccc]">
-                    <p className="text-[#101828] text-base sm:text-lg font-semibold">{question.question}</p>
+                    <p className="text-[#101828] text-base sm:text-lg font-semibold">{questionText(question)}</p>
                     <div className="flex flex-col space-y-4 ml-2 sm:ml-8">
                       {question.options.map((elem) => (
                         <label key={elem.value} className="flex items-center gap-x-3">

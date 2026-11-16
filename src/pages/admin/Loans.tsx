@@ -14,8 +14,8 @@ export default function Loans () {
 
   return (
     <div className="relative">
-      <div className="flex flex-col w-full gap-10 p-5 xl:p-6">
-        <div className="flex justify-between items-center pb-[10px] border-b-[1px] border-[#E0E0E0]">
+      <div className="flex flex-col w-full gap-6 p-4 sm:p-5 xl:p-6">
+        <div className="flex flex-wrap gap-3 justify-between items-center pb-[10px] border-b-[1px] border-[#E0E0E0]">
           <p className="text-[#101828] text-[18px] font-semibold">Recent Loans Applications</p>
 
           <button 

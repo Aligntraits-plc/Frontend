@@ -50,7 +50,7 @@ export default function AdminDashboardLayout() {
   if (role && !PANEL.includes(role as any)) return <Navigate to="/dashboard" replace />;
 
   return (
-    <div className="h-screen flex relative overflow-y-scroll bg-[#F9FAFB]">
+    <div className="at-admin h-screen flex relative overflow-y-scroll bg-[#F9FAFB]">
       <Sidebar open={open} setOpen={setOpen} />
       <div className="flex-1 min-w-0 relative">
         <Header setOpen={setOpen} />

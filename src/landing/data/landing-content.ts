@@ -352,10 +352,10 @@ export const FOOTER = {
     },
   ] satisfies readonly FooterColumn[],
   social: [
-    /* Only accounts with a real address are listed. Add LinkedIn, Instagram and Facebook
-       here once their addresses are confirmed; an entry with '#' is not shown. */
-    { platform: 'linkedin', label: 'AlignTraits on LinkedIn', href: '#' },
-    { platform: 'instagram', label: 'AlignTraits on Instagram', href: '#' },
+    /* Only accounts with a real address are listed. Add Facebook here once its address
+       is confirmed; an entry with '#' is not shown. */
+    { platform: 'linkedin', label: 'AlignTraits on LinkedIn', href: 'https://www.linkedin.com/company/aligntraits/' },
+    { platform: 'instagram', label: 'AlignTraits on Instagram', href: 'https://www.instagram.com/aligntraits/' },
     { platform: 'tiktok', label: 'AlignTraits on TikTok', href: 'https://www.tiktok.com/@aligntraits' },
     { platform: 'facebook', label: 'AlignTraits on Facebook', href: '#' },
   ] satisfies readonly SocialLink[],

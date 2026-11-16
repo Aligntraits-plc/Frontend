@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
 import { LuSchool } from "react-icons/lu";
-import { FiBell, FiGrid, FiKey, FiLogOut, FiMessageSquare, FiX } from "react-icons/fi";
+import { FiAward, FiBell, FiGrid, FiKey, FiLogOut, FiMessageSquare, FiX } from "react-icons/fi";
 import { PiTextAlignCenterFill } from "react-icons/pi";
 import { TbMoneybag } from "react-icons/tb";
 import { TiGroupOutline } from "react-icons/ti";
@@ -31,6 +31,7 @@ const SideBar = ({ open, setOpen }: { open: boolean; setOpen: React.Dispatch<Rea
     { to: "/admin/school-codes", label: "School codes", icon: FiKey, roles: ADMINS },
     { to: "/admin/ambassadors", label: "Ambassadors", icon: MdOutlineStars, roles: ADMINS },
     { to: "/admin/community", label: role === "CONTENT_MANAGER" ? "Exam dates and deadlines" : "Community", icon: FiMessageSquare, roles: CONTENT_TEAM },
+    { to: "/admin/scholarships", label: "Scholarships and workshops", icon: FiAward, roles: CONTENT_TEAM },
     { to: "/admin/users", label: "Students", icon: FaUser, roles: ADMINS },
     { to: "/admin/waitlist", label: "Waitlist", icon: CiNoWaitingSign, roles: ADMINS },
     { to: "/admin/bulk-center", label: "Bulk center", icon: PiTextAlignCenterFill, roles: CONTENT_TEAM },

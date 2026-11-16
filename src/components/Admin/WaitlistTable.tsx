@@ -39,8 +39,8 @@ export default function WaitlistTable({
       )}
 
       {!isLoading && (
-        <div className="w-full h-[400px] overflow-y-scroll">
-          <table className="w-full table-auto space-y-4">
+        <div className="at-rtable-wrap w-full h-[400px] overflow-y-scroll">
+          <table className="at-rtable w-full table-auto space-y-4">
             <thead className="border-b-[0.8px] border-[#EAECF0] p-[20px] bg-white sticky top-0">
               <tr className="[&>th]:text-[#000000] [&>th]:text-[14px] [&>th]:font-medium [&>th]:pb-2">
                 <th className="w-[25%] p-[20px]">
@@ -63,10 +63,10 @@ export default function WaitlistTable({
                     className="[&>td]:py-5 hover:bg-[#007BFF33] border-b border-gray-300 cursor-pointer"
                     key={index + user.id}
                   >
-                    <td className="text-[#000000] text-[16px] font-[400] p-[20px] flex gap-2 items-center">
+                    <td data-label="Email" data-primary="" className="text-[#000000] text-[16px] font-[400] p-[20px] flex gap-2 items-center">
                       <p>{user.email}</p>
                     </td>
-                    <td className="text-[#757575] text-[14px] font-[500] p-[20px]">
+                    <td data-label="Date Of Reg" className="text-[#757575] text-[14px] font-[500] p-[20px]">
                       {formatDateToYYYYMMDD(new Date(user.createdAt))}
                     </td>
                   </tr>

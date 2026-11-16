@@ -13,6 +13,7 @@ const TITLES: [string, string, string][] = [
   ["/admin/team", "Team", "Invite staff and choose what each person can do."],
   ["/admin/school-codes", "School codes", "Codes that cover a partner school's students."],
   ["/admin/community", "Community", "Events, channels, reports and messages to the team."],
+  ["/admin/scholarships", "Scholarships and workshops", "What students see on Financing, and who is waiting for workshop courses."],
   ["/admin/accounts", "My account", "Your name, contact details and password."],
   ["/admin/users", "Students", "Everyone using AlignTraits."],
   ["/admin/waitlist", "Waitlist", "People who registered interest."],

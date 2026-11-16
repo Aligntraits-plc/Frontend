@@ -201,10 +201,10 @@ export default function DashboardLayout() {
             className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
             onClick={() => setShowModal(false)}
           >
-            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-[90%]" onClick={(e) => e.stopPropagation()}>
               <h2 className="text-xl font-bold mb-4">Career Pathway</h2>
               <p className="mb-4">
-                Your career path result is ready. Click here to view
+                Your career path result is ready.
               </p>
               <button
                 onClick={() => {
@@ -214,6 +214,13 @@ export default function DashboardLayout() {
                 className="w-full h-12 bg-[#004085] text-white rounded-lg hover:bg-blue-700"
               >
                 View Results
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowModal(false)}
+                className="mt-2 w-full h-12 rounded-lg border border-[#D0D5DD] text-[#344054] hover:bg-[#F9FAFB]"
+              >
+                Not now
               </button>
             </div>
           </div>

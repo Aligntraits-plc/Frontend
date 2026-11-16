@@ -26,7 +26,7 @@ export default function LoanTable({
 
       {!isLoading && (
         <div className="w-full min-h-[500px] border border-[#EAECF0] rounded-lg">
-          <table className="w-full table-auto space-y-4">
+          <table className="at-rtable w-full table-auto space-y-4">
             <thead className="border-b-[0.8px] border-[#EAECF0] p-[20px]">
               <tr className="[&>th]:text-[#000000] [&>th]:text-[14px] [&>th]:font-medium [&>th]:pb-2">
                 <th className="w-[16.6%] p-[20px]">
@@ -70,22 +70,22 @@ export default function LoanTable({
                     className="[&>td]:py-5 hover:bg-[#007BFF33] border-b border-gray-300 last:border-b-0"
                     key={index + loans.id}
                   >
-                    <td className="text-[#000000] text-[16px] font-[400] p-[20px] flex gap-10">
+                    <td data-label="Time" data-primary="" className="text-[#000000] text-[16px] font-[400] p-[20px] flex gap-10">
                     {getDays(loans.time)}
                     </td>
-                    <td className="text-[#757575] text-[14px] font-[500] p-[20px]">
+                    <td data-label="School" className="text-[#757575] text-[14px] font-[500] p-[20px]">
                       {loans.school}
                     </td>
-                    <td className="text-[#757575] text-[14px] font-[500] p-[20px]">
+                    <td data-label="Individual Name" className="text-[#757575] text-[14px] font-[500] p-[20px]">
                       {loans.name}
                     </td>
-                    <td className="text-[#757575] text-[14px] font-[500] p-[20px]">
+                    <td data-label="Amount" className="text-[#757575] text-[14px] font-[500] p-[20px]">
                       {loans.course}
                     </td>
-                    <td className="text-[#757575] text-[14px] font-[500] p-[20px]">
+                    <td data-label="Status" className="text-[#757575] text-[14px] font-[500] p-[20px]">
                       {getDays(loans.status)}
                     </td>
-                    <td className="p-[20px] flex gap-x-[20px] items-center">
+                    <td data-label="Action" data-actions="" className="p-[20px] flex gap-x-[20px] items-center">
                       <FaRegTrashCan className="text-[#D92D20] h-5 w-5 cursor-pointer" />
                       
                       <MdOutlineEdit className="text-[#757575] h-6 w-6 font-[500] cursor-pointer" />

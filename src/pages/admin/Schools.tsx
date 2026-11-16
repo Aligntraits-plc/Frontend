@@ -139,16 +139,16 @@ export default function Schools() {
 
   return (
     <div className="relative">
-      <div className="flex flex-col w-full gap-10 p-5 xl:p-6">
-        <div className="flex justify-between items-center border-b border-[#EAECF0] py-[20px]">
+      <div className="flex flex-col w-full gap-5 p-4 sm:p-5 xl:p-6">
+        <div className="flex flex-col gap-3 md:flex-row md:justify-between md:items-center border-b border-[#EAECF0] py-[14px]">
           <div className="flex gap-x-[20px] items-center">
             <p className="text-[#101828] text-[18px] font-semibold">
               Schools you've created
             </p>
           </div>
 
-          <div className="flex gap-x-[20px]">
-            <div className="relative w-[250px]">
+          <div className="flex flex-wrap items-center gap-3 md:gap-x-[20px] w-full md:w-auto">
+            <div className="relative w-full sm:w-[250px] sm:flex-none">
               <input
                 type="text"
                 placeholder="Search schools..."
@@ -186,13 +186,13 @@ export default function Schools() {
                 label: bulkUploadType,
               }}
               handleError={() => {}}
-              classNameStyle="w-[180px]"
+              classNameStyle="w-full sm:w-[180px]"
             />
 
             <button
               type="button"
               onClick={() => setShowModal(true)}
-              className="w-[150px] text-white text-[14px] font-medium py-2 h-[40px] bg-[#004085] p-2 rounded-md 
+              className="w-full sm:w-[150px] text-white text-[14px] font-medium py-2 h-[40px] bg-[#004085] p-2 rounded-md 
                   outline-0 focus:outline-none flex justify-center items-center gap-x-[10px]"
             >
               <p>Create School</p>

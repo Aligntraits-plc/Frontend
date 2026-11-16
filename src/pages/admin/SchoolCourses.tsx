@@ -137,8 +137,8 @@ export default function SchoolCourses() {
 
   return (
     <div className="relative">
-      <div className="flex flex-col w-full gap-5 p-5 xl:p-6">
-        <div className="flex justify-between items-center gap-x-[10px] border-b border-[#EAECF0] py-[10px]">
+      <div className="flex flex-col w-full gap-5 p-4 sm:p-5 xl:p-6">
+        <div className="flex flex-col gap-3 md:flex-row md:justify-between md:items-center border-b border-[#EAECF0] py-[14px]">
           <div className="flex gap-x-[10px] items-center">
             <div>
               <div
@@ -159,8 +159,8 @@ export default function SchoolCourses() {
             </div>
           </div>
 
-          <div className="flex gap-x-[20px]">
-            <div className="relative w-[250px]">
+          <div className="flex flex-wrap items-center gap-3 md:gap-x-[20px] w-full md:w-auto">
+            <div className="relative w-full sm:w-[250px] sm:flex-none">
               <input
                 type="text"
                 placeholder="Search courses..."
@@ -198,13 +198,13 @@ export default function SchoolCourses() {
                 label: bulkUploadType,
               }}
               handleError={() => {}}
-              classNameStyle="w-[200px]"
+              classNameStyle="w-full sm:w-[200px]"
             />
 
             <button
               onClick={handleAddCourse}
               type="button"
-              className="w-[150px] text-white text-[14px] font-medium py-2 h-[40px] bg-[#004085] p-2 rounded-md 
+              className="w-full sm:w-[150px] text-white text-[14px] font-medium py-2 h-[40px] bg-[#004085] p-2 rounded-md 
                   outline-0 focus:outline-none flex justify-center items-center gap-x-[10px]"
             >
               <p>Add Course</p>

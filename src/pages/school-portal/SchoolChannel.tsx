@@ -105,7 +105,7 @@ export default function SchoolChannel() {
                       <button
                         type="button"
                         onClick={() => remove(m)}
-                        className="ml-auto rounded p-1 text-[#98A2B3] opacity-100 hover:bg-[#FEF3F2] hover:text-[#B42318] sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100"
+                        className="ml-auto -my-2 flex h-11 w-11 shrink-0 items-center justify-center rounded-lg text-[#98A2B3] opacity-100 sm:my-0 sm:h-7 sm:w-7 hover:bg-[#FEF3F2] hover:text-[#B42318] sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100"
                         aria-label={`Remove ${m.author.name}'s message`}
                       >
                         <Trash2 size={15} aria-hidden="true" />
