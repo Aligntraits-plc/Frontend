@@ -60,11 +60,12 @@ const { token, setToken: setSessionToken } = useAuth()
 
         // console.log("test error: ", err)
 
-        if (err.status === 404) {
-          setAdminError("Admin does not exist")
-        } else {
-          setPasswordError("This password is not correct")
+        if (err.response.data.code === "TOO_MANY_ATTEMPTS") {
+          navigate(`/admin/forgot-password?reason=locked&email=${encodeURIComponent(String(credentials.email || "").trim())}`)
+          return
         }
+        // One message for a wrong email or password, so the page never says who has an account.
+        setPasswordError(err.response.data.errors?.[0]?.message || "Incorrect email or password")
 
         // errors.forEach((error: { message: string }) => {
         //   if (error.message) {
@@ -85,7 +86,6 @@ const { token, setToken: setSessionToken } = useAuth()
         setAdminError("")
         setPasswordError("")
       }, 3000);
-      throw err;
     } finally {
       setIsLoading(false);
       

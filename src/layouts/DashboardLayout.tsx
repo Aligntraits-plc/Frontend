@@ -144,8 +144,12 @@ export default function DashboardLayout() {
           // For new users, that filled their career pathway outside of login can they have a pop up on
           // their first login to redirect them to career path?
 
-          if (!response.data?.isCareerPathChecked) {
-            return setShowModal(true);
+          // Shown once per student, and only on the dashboard home, not on every page.
+          if (!response.data?.isCareerPathChecked && window.location.pathname.replace(/\/$/, "") === "/dashboard") {
+            const seenKey = `career_popup_seen_${response.data.id}`;
+            let seen = false;
+            try { seen = localStorage.getItem(seenKey) === "1"; localStorage.setItem(seenKey, "1"); } catch { /* storage blocked: show it this time */ }
+            if (!seen) return setShowModal(true);
           }
         }
       }
@@ -208,7 +212,7 @@ export default function DashboardLayout() {
               </p>
               <button
                 onClick={() => {
-                  false;
+                  setShowModal(false);
                   navigate("/dashboard/career-pathway");
                 }}
                 className="w-full h-12 bg-[#004085] text-white rounded-lg hover:bg-blue-700"

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import * as authService from '../../services/auth.service'
 import resetIcon from "../../assets/imgTwo.svg"
 import { AxiosError } from 'axios'
@@ -15,7 +15,10 @@ interface ForgotPasswordProps {
 
 export default function ForgotPassword({fromAdmin = false}: ForgotPasswordProps) {
   const navigate = useNavigate()
-  const [email, setEmail] = useState('')
+  const [params] = useSearchParams()
+  // A locked sign in sends people here with their email filled in.
+  const [email, setEmail] = useState(params.get('email') || '')
+  const lockedOut = params.get('reason') === 'locked'
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -23,6 +26,15 @@ export default function ForgotPassword({fromAdmin = false}: ForgotPasswordProps)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    const value = email.trim()
+    if (!value) {
+      setError("Enter the email you signed up with.")
+      return
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      setError("That email address does not look right. Check it and try again.")
+      return
+    }
     setIsLoading(true)
 
     try {
@@ -69,7 +81,12 @@ export default function ForgotPassword({fromAdmin = false}: ForgotPasswordProps)
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-6 flex flex-col w-full max-w-[450px]">
+            <form onSubmit={handleSubmit} noValidate className="space-y-6 flex flex-col w-full max-w-[450px]">
+              {lockedOut && (
+                <p role="status" className="rounded-lg border border-[#FEDF89] bg-[#FFFAEB] px-3 py-2 text-[14px] text-[#93370D]">
+                  Too many wrong passwords. Sign in is paused for up to an hour. Set a new password below to sign in now.
+                </p>
+              )}
               <div className="">
                 <input
                   id="email"

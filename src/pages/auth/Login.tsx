@@ -41,6 +41,10 @@ export default function Login() {
     } catch (err: any) {
       // Accounts made by the quiz, a check or a payment have no password yet:
       // send them to set one (we email them a 6 digit code there).
+      if (err?.response?.data?.code === "TOO_MANY_ATTEMPTS") {
+        navigate(`/forgot-password?reason=locked&email=${encodeURIComponent(credentials.email.trim())}`);
+        return;
+      }
       if (err?.response?.data?.code === "PASSWORD_NOT_SET") {
         navigate(`/setup-password?email=${encodeURIComponent(credentials.email.trim())}`);
         return;

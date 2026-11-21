@@ -34,6 +34,7 @@ export default function SkillRoadMap() {
     confirmPassword: ""
   });
   const [isLoading, setIsLoading] = useState(false)
+  const [formError, setFormError] = useState("")
 
   const [showPassword, setShowPassword] = useState({
     currentPassword: false,
@@ -51,14 +52,12 @@ export default function SkillRoadMap() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (credentials.currentPassword.length <= 8 || credentials.confirmPassword.length <= 8
-      || credentials.newPassword.length <= 8 ) {
-        return toast("Password should be at least 8 characters", {autoClose: 2000})
-    } 
-
-    if (credentials.confirmPassword !== credentials.newPassword) {
-      return toast("New password and confirm password must match!", {autoClose: 2000});
-    }
+    setFormError("")
+    // Each problem gets its own message, shown under the form.
+    if (!credentials.currentPassword) return setFormError("Enter your current password.")
+    if (credentials.newPassword.length < 8) return setFormError("Your new password needs at least 8 characters.")
+    if (credentials.confirmPassword !== credentials.newPassword) return setFormError("The two new passwords do not match.")
+    if (credentials.newPassword === credentials.currentPassword) return setFormError("Choose a new password that is different from the current one.")
 
     handleChangePassword()
 
@@ -83,9 +82,8 @@ export default function SkillRoadMap() {
             window.location.href = '/login'
           }, 1500)
         }
-      } catch (err) {
-        // setError(err instanceof Error ? err.message : 'An error occurred');
-        toast.error("An error occured!")
+      } catch (err: any) {
+        setFormError(err?.response?.data?.errors?.[0]?.message || err?.response?.data?.message || "We could not change your password. Try again.")
       } finally {
         setIsLoading(false);
       }
@@ -100,7 +98,7 @@ export default function SkillRoadMap() {
         </div>
 
 
-        <form onSubmit={handleSubmit} className="mt-3 lg:mt-10 border-[1px] border-[#EAECF0] flex flex-col gap-y-[20px] shadow-md rounded-xl p-5 w-[100%] size-max">
+        <form onSubmit={handleSubmit} noValidate className="mt-3 lg:mt-10 border-[1px] border-[#EAECF0] flex flex-col gap-y-[20px] shadow-md rounded-xl p-5 w-[100%] size-max">
           <div>
             <p className="text-[#212529] text-[18px] font-bold">Change Password</p>
             <p className='text-[12px] text-[#757575] mt-2'>Update your password to keep your account secure. You'll be logged out after changing your password.</p>
@@ -223,6 +221,9 @@ export default function SkillRoadMap() {
             </div>
           </div>
 
+          {formError && (
+            <p role="alert" className="text-[14px] text-[#B42318]">{formError}</p>
+          )}
           <div className='w-full flex justify-center lg:justify-end'>
             <button type="submit" className='h-[45px] bg-[#004085] rounded-xl text-[white] font-semibold text-[14px] w-[180px] hover:bg-[#0056b3] transition-colors duration-300'>
               {isLoading ? <BeatLoader /> : "Change Password"}

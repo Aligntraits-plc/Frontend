@@ -176,7 +176,7 @@ export default function Scholarships() {
                   <p className="flex flex-wrap items-center gap-2 text-[15px] font-semibold text-[#101828]">
                     <span className="break-words">{r.name}</span>
                     {!r.active && <Pill>Hidden</Pill>}
-                    {r.closesAt ? <Pill tone="gold">Closes {niceDate(r.closesAt)}</Pill> : <Pill>No date yet</Pill>}
+                    {r.closesAt ? <Pill tone="gold">Closes {niceDate(r.closesAt)}</Pill> : <Pill tone="red">No closing date: reminders are off</Pill>}
                   </p>
                   <p className="mt-1 text-[14px] leading-[22px] text-[#475467]">
                     {r.funder} · {r.amountText}
